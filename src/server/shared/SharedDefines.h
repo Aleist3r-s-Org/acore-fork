@@ -359,7 +359,7 @@ const uint32 ItemQualityColors[MAX_ITEM_QUALITY] =
     0xffa335ee,        //PURPLE
     0xffff8000,        //ORANGE
     0xffe6cc80,        //LIGHT YELLOW
-    0xffe6cc80         //LIGHT YELLOW
+    0xff00ccff         //BLIZZARD BLUE
 };
 
 size_t constexpr MAX_QUEST_DIFFICULTY = 5;
@@ -3012,10 +3012,11 @@ enum SkillType
     SKILL_PET_WASP                 = 785,
     SKILL_PET_EXOTIC_RHINO         = 786,
     SKILL_PET_EXOTIC_CORE_HOUND    = 787,
-    SKILL_PET_EXOTIC_SPIRIT_BEAST  = 788
+    SKILL_PET_EXOTIC_SPIRIT_BEAST  = 788,
+    SKILL_WARGLAIVES               = 789
 };
 
-#define MAX_SKILL_TYPE               789
+#define MAX_SKILL_TYPE               790
 
 inline SkillType SkillByLockType(LockType locktype)
 {

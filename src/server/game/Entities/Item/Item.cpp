@@ -228,6 +228,14 @@ bool ItemCanGoIntoBag(ItemTemplate const* pProto, ItemTemplate const* pBagProto)
                         if (!(pProto->BagFamily & BAG_FAMILY_MASK_INSCRIPTION_SUPP))
                             return false;
                         return true;
+                    case ITEM_SUBCLASS_TACKLE_CONTAINER:
+                        if (!(pProto->BagFamily & BAG_FAMILY_MASK_FISHING_SUPP))
+                            return false;
+                        return true;
+                    case ITEM_SUBCLASS_COOKING_CONTAINER:
+                        if (!(pProto->BagFamily & BAG_FAMILY_MASK_COOKING_SUPP))
+                            return false;
+                        return true;
                     default:
                         return false;
                 }
@@ -585,6 +593,8 @@ uint32 Item::GetSpell()
                     return  201;
                 case ITEM_SUBCLASS_WEAPON_SWORD2:
                     return  202;
+                case ITEM_SUBCLASS_WEAPON_WARGLAIVE:
+                    return 80999;
                 case ITEM_SUBCLASS_WEAPON_STAFF:
                     return  227;
                 case ITEM_SUBCLASS_WEAPON_DAGGER:
