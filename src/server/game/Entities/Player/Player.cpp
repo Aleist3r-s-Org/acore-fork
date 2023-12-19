@@ -15985,6 +15985,8 @@ bool Player::HasTankSpec()
         case TALENT_TREE_WARRIOR_PROTECTION:
         case TALENT_TREE_PALADIN_PROTECTION:
         case TALENT_TREE_DEATH_KNIGHT_BLOOD:
+        case TALENT_TREE_MONK_BREWMASTER:
+        case TALENT_TREE_DEMON_HUNTER_VENGEANCE:
             return true;
         case TALENT_TREE_DRUID_FERAL_COMBAT:
             if (GetShapeshiftForm() == FORM_BEAR || GetShapeshiftForm() == FORM_DIREBEAR)
@@ -16009,6 +16011,9 @@ bool Player::HasMeleeSpec()
         case TALENT_TREE_DEATH_KNIGHT_FROST:
         case TALENT_TREE_DEATH_KNIGHT_UNHOLY:
         case TALENT_TREE_SHAMAN_ENHANCEMENT:
+        case TALENT_TREE_MONK_WINDWALKER:
+        case TALENT_TREE_DEMON_HUNTER_ANGUISH:
+        case TALENT_TREE_DEMON_HUNTER_HAVOC:
             return true;
         case TALENT_TREE_DRUID_FERAL_COMBAT:
             if (GetShapeshiftForm() == FORM_CAT)
@@ -16050,6 +16055,7 @@ bool Player::HasHealSpec()
         case TALENT_TREE_PRIEST_DISCIPLINE:
         case TALENT_TREE_PRIEST_HOLY:
         case TALENT_TREE_SHAMAN_RESTORATION:
+        case TALENT_TREE_MONK_MISTWEAVER:
         case TALENT_TREE_DRUID_RESTORATION:
             return true;
         default:
@@ -16214,9 +16220,11 @@ std::string Player::GetPlayerName()
     switch (getClass())
     {
         case CLASS_DEATH_KNIGHT: color = "|cffC41F3B"; break;
+        case CLASS_DEMON_HUNTER: color = "|cffA330C9"; break;
         case CLASS_DRUID:        color = "|cffFF7D0A"; break;
         case CLASS_HUNTER:       color = "|cffABD473"; break;
         case CLASS_MAGE:         color = "|cff69CCF0"; break;
+        case CLASS_MONK:         color = "|cff00FF98"; break;
         case CLASS_PALADIN:      color = "|cffF58CBA"; break;
         case CLASS_PRIEST:       color = "|cffFFFFFF"; break;
         case CLASS_ROGUE:        color = "|cffFFF569"; break;

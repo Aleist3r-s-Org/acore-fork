@@ -431,6 +431,9 @@ class spell_pal_blessing_of_faith : public SpellScript
                 case CLASS_DRUID:
                     spell_id = SPELL_PALADIN_BLESSING_OF_LOWER_CITY_DRUID;
                     break;
+                case CLASS_MONK:    // TODO
+                    //spell_id = ;
+                    break;
                 case CLASS_PALADIN:
                     spell_id = SPELL_PALADIN_BLESSING_OF_LOWER_CITY_PALADIN;
                     break;

@@ -6615,12 +6615,14 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                             {
                                 case CLASS_PALADIN:                 // 39511, 40997, 40998, 40999, 41002, 41005, 41009, 41011, 41409
                                 case CLASS_DRUID:                   // 39511, 40997, 40998, 40999, 41002, 41005, 41009, 41011, 41409
+                                case CLASS_MONK:                    // TODO
                                     triggered_spell_id = RAND(39511, 40997, 40998, 40999, 41002, 41005, 41009, 41011, 41409);
                                     cooldown_spell_id = 39511;
                                     break;
                                 case CLASS_ROGUE:                   // 39511, 40997, 40998, 41002, 41005, 41011
                                 case CLASS_WARRIOR:                 // 39511, 40997, 40998, 41002, 41005, 41011
                                 case CLASS_DEATH_KNIGHT:
+                                case CLASS_DEMON_HUNTER:
                                     triggered_spell_id = RAND(39511, 40997, 40998, 41002, 41005, 41011);
                                     cooldown_spell_id = 39511;
                                     break;
@@ -6815,6 +6817,8 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                                     break;
                                 case CLASS_SHAMAN:
                                 case CLASS_ROGUE:
+                                case CLASS_DEMON_HUNTER:
+                                case CLASS_MONK:
                                     RandomSpells.push_back(71486);
                                     RandomSpells.push_back(71485);
                                     RandomSpells.push_back(71492);
@@ -6858,6 +6862,8 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                                     break;
                                 case CLASS_SHAMAN:
                                 case CLASS_ROGUE:
+                                case CLASS_DEMON_HUNTER:
+                                case CLASS_MONK:
                                     RandomSpells.push_back(71558);
                                     RandomSpells.push_back(71556);
                                     RandomSpells.push_back(71560);
@@ -7802,6 +7808,9 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                                     break;
                                 case CLASS_HUNTER:
                                 case CLASS_ROGUE:
+                                case CLASS_DEMON_HUNTER:
+                                case CLASS_MONK:
+                                case CLASS_DEATH_KNIGHT:
                                     triggered_spell_id = 28791;     // Increases the friendly target's attack power by $s1 for $d.
                                     break;
                                 case CLASS_WARRIOR:
@@ -8051,6 +8060,9 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                                     break;
                                 case CLASS_HUNTER:
                                 case CLASS_ROGUE:
+                                case CLASS_DEMON_HUNTER:
+                                case CLASS_MONK:
+                                case CLASS_DEATH_KNIGHT:
                                     triggered_spell_id = 28826;     // Increases the friendly target's attack power by $s1 for $d.
                                     break;
                                 case CLASS_WARRIOR:
@@ -9215,6 +9227,9 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                                         break;
                                     case CLASS_SHAMAN:
                                         trigger_spell_id = 60515;
+                                        break;
+                                    case CLASS_MONK:
+                                        //trigger_spell_id = ;      // TODO
                                         break;
                                 }
 

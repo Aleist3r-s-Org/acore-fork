@@ -377,16 +377,19 @@ public:
                 case CLASS_PRIEST:
                 case CLASS_PALADIN:
                 case CLASS_WARLOCK:
+                case CLASS_DEATH_KNIGHT:
                     victim->CastSpell(me, SPELL_SOUL_CHARGE_RED, true);
                     break;
                 case CLASS_MAGE:
                 case CLASS_ROGUE:
                 case CLASS_WARRIOR:
+                case CLASS_DEMON_HUNTER:
                     victim->CastSpell(me, SPELL_SOUL_CHARGE_YELLOW, true);
                     break;
                 case CLASS_DRUID:
                 case CLASS_SHAMAN:
                 case CLASS_HUNTER:
+                case CLASS_MONK:
                     victim->CastSpell(me, SPELL_SOUL_CHARGE_GREEN, true);
                     break;
             }

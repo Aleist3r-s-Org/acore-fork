@@ -147,18 +147,19 @@ enum Classes
     CLASS_SHAMAN        = 7, // TITLE Shaman
     CLASS_MAGE          = 8, // TITLE Mage
     CLASS_WARLOCK       = 9, // TITLE Warlock
-    //CLASS_UNK           = 10,
-    CLASS_DRUID         = 11 // TITLE Druid
+    CLASS_MONK          = 10, // TITLE Monk
+    CLASS_DRUID         = 11, // TITLE Druid
+    CLASS_DEMON_HUNTER  = 12
 };
 
 // max+1 for player class
-#define MAX_CLASSES       12
+#define MAX_CLASSES       13
 
 #define CLASSMASK_ALL_PLAYABLE \
     ((1<<(CLASS_WARRIOR-1))|(1<<(CLASS_PALADIN-1))|(1<<(CLASS_HUNTER-1))| \
     (1<<(CLASS_ROGUE-1))  |(1<<(CLASS_PRIEST-1)) |(1<<(CLASS_SHAMAN-1))| \
     (1<<(CLASS_MAGE-1))   |(1<<(CLASS_WARLOCK-1))|(1<<(CLASS_DRUID-1)) | \
-    (1<<(CLASS_DEATH_KNIGHT-1)))
+    (1<<(CLASS_DEATH_KNIGHT-1))|(1<<(CLASS_MONK-1))|(1<<(CLASS_DEMON_HUNTER-1)))
 
 // valid classes for creature_template.unit_class
 enum UnitClass
@@ -672,7 +673,7 @@ enum SpellAttr7 : uint32
     SPELL_ATTR7_ALWAYS_CAST_LOG                               = 0x80000000  // TITLE Client indicator (client only)
 };
 
-#define MAX_TALENT_SPECS        2
+#define MAX_TALENT_SPECS        3
 #define MAX_GLYPH_SLOT_INDEX    6
 
 // Custom values
@@ -2829,6 +2830,8 @@ enum QuestSort
     QUEST_SORT_NOBLEGARDEN         = 374,
     QUEST_SORT_PILGRIMS_BOUNTY     = 375,
     QUEST_SORT_LOVE_IS_IN_THE_AIR  = 376,
+    QUEST_SORT_MONK                = 377,
+    QUEST_SORT_DEMON_HUNTER        = 378
 };
 
 inline uint8 ClassByQuestSort(int32 QuestSort)
@@ -2855,6 +2858,10 @@ inline uint8 ClassByQuestSort(int32 QuestSort)
             return CLASS_DRUID;
         case QUEST_SORT_DEATH_KNIGHT:
             return CLASS_DEATH_KNIGHT;
+        case QUEST_SORT_MONK:
+            return CLASS_MONK;
+        case QUEST_SORT_DEMON_HUNTER:
+            return CLASS_DEMON_HUNTER;
     }
     return 0;
 }
@@ -3013,10 +3020,16 @@ enum SkillType
     SKILL_PET_EXOTIC_RHINO         = 786,
     SKILL_PET_EXOTIC_CORE_HOUND    = 787,
     SKILL_PET_EXOTIC_SPIRIT_BEAST  = 788,
-    SKILL_WARGLAIVES               = 789
+    SKILL_WARGLAIVES               = 789,
+    SKILL_MONK_BREWMASTER          = 790,
+    SKILL_MONK_MISTWEAVER          = 791,
+    SKILL_MONK_WINDWALKER          = 792,
+    SKILL_DH_ANGUISH               = 793,
+    SKILL_DH_HAVOC                 = 794,
+    SKILL_DH_VENGEANCE             = 795
 };
 
-#define MAX_SKILL_TYPE               790
+#define MAX_SKILL_TYPE               796
 
 inline SkillType SkillByLockType(LockType locktype)
 {
@@ -3543,7 +3556,9 @@ enum SpellFamilyNames
     // 14 - unused
     SPELLFAMILY_DEATHKNIGHT = 15,
     // 16 - unused
-    SPELLFAMILY_PET         = 17
+    SPELLFAMILY_PET         = 17,
+    SPELLFAMILY_MONK        = 18,
+    SPELLFAMILY_DEMONHUNTER = 19
 };
 
 enum TradeStatus

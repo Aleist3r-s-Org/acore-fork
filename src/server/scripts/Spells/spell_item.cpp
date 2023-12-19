@@ -1240,6 +1240,9 @@ class spell_item_eye_of_gruul_healing_discount : public AuraScript
                 case CLASS_DRUID:
                     spell_id = SPELL_DRUID_ITEM_HEALING_TRANCE;
                     break;
+                case CLASS_MONK:    // TODO
+                    //spell_id = ;
+                    break;
                 case CLASS_PALADIN:
                     spell_id = SPELL_PALADIN_ITEM_HEALING_TRANCE;
                     break;
@@ -1742,6 +1745,7 @@ class spell_item_flask_of_the_north : public SpellScript
                 break;
             case CLASS_ROGUE:
             case CLASS_HUNTER:
+            case CLASS_DEMON_HUNTER:
                 possibleSpells.push_back(SPELL_FLASK_OF_THE_NORTH_AP);
                 break;
             case CLASS_DRUID:
@@ -1749,6 +1753,7 @@ class spell_item_flask_of_the_north : public SpellScript
                 possibleSpells.push_back(SPELL_FLASK_OF_THE_NORTH_SP);
                 possibleSpells.push_back(SPELL_FLASK_OF_THE_NORTH_STR);
                 break;
+            case CLASS_MONK:
             case CLASS_SHAMAN:
                 possibleSpells.push_back(SPELL_FLASK_OF_THE_NORTH_SP);
                 possibleSpells.push_back(SPELL_FLASK_OF_THE_NORTH_AP);

@@ -2222,8 +2222,14 @@ public:
             case CLASS_WARLOCK:
                 classStr = "Warlock";
                 break;
+            case CLASS_MONK:
+                classStr = "Monk";
+                break;
             case CLASS_DRUID:
                 classStr = "Druid";
+                break;
+            case CLASS_DEMON_HUNTER:
+                classStr = "Demon Hunter";
                 break;
         }
 

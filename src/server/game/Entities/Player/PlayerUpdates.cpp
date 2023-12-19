@@ -1947,7 +1947,7 @@ void Player::UpdateCharmedAI()
     bool Mages =
         getClassMask() & (1 << (CLASS_MAGE - 1) | 1 << (CLASS_WARLOCK - 1) |
                           1 << (CLASS_DRUID - 1) | 1 << (CLASS_HUNTER - 1) |
-                          1 << (CLASS_PRIEST - 1));
+                          1 << (CLASS_PRIEST - 1) | 1 << (CLASS_MONK - 1));
 
     // Xinef: charmer type specific actions
     if (charmer->GetTypeId() == TYPEID_PLAYER)

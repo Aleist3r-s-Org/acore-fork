@@ -250,7 +250,7 @@ uint8 Player::FindEquipSlot(ItemTemplate const* proto, uint32 slot, bool swap) c
                         slots[0] = EQUIPMENT_SLOT_RANGED;
                     break;
                 case ITEM_SUBCLASS_ARMOR_IDOL:
-                    if (playerClass == CLASS_DRUID)
+                    if (playerClass == CLASS_DRUID || playerClass == CLASS_MONK)
                         slots[0] = EQUIPMENT_SLOT_RANGED;
                     break;
                 case ITEM_SUBCLASS_ARMOR_TOTEM:
@@ -262,7 +262,7 @@ uint8 Player::FindEquipSlot(ItemTemplate const* proto, uint32 slot, bool swap) c
                         slots[0] = EQUIPMENT_SLOT_RANGED;
                     break;
                 case ITEM_SUBCLASS_ARMOR_SIGIL:
-                    if (playerClass == CLASS_DEATH_KNIGHT)
+                    if (playerClass == CLASS_DEATH_KNIGHT || playerClass == CLASS_DEMON_HUNTER)
                         slots[0] = EQUIPMENT_SLOT_RANGED;
                     break;
             }
@@ -2276,6 +2276,7 @@ InventoryResult Player::CanUseItem(Item* pItem, bool not_loading) const
                         case CLASS_SHAMAN:
                             allowEquip = (itemSkill == SKILL_MAIL);
                             break;
+                        case CLASS_DEATH_KNIGHT:
                         case CLASS_PALADIN:
                         case CLASS_WARRIOR:
                             allowEquip = (itemSkill == SKILL_PLATE_MAIL);
@@ -2413,8 +2414,8 @@ InventoryResult Player::CanRollForItemInLFG(ItemTemplate const* proto, WorldObje
             return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
         }
 
-        // CHeck for idols.
-        if (proto->SubClass == ITEM_SUBCLASS_ARMOR_IDOL && _class != CLASS_DRUID)
+        // Check for idols.
+        if (proto->SubClass == ITEM_SUBCLASS_ARMOR_IDOL && !(_class == CLASS_DRUID || _class == CLASS_MONK))
         {
             return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
         }
@@ -2426,7 +2427,7 @@ InventoryResult Player::CanRollForItemInLFG(ItemTemplate const* proto, WorldObje
         }
 
         // Check for sigils.
-        if (proto->SubClass == ITEM_SUBCLASS_ARMOR_SIGIL && _class != CLASS_DEATH_KNIGHT)
+        if (proto->SubClass == ITEM_SUBCLASS_ARMOR_SIGIL && !(_class == CLASS_DEATH_KNIGHT || _class == CLASS_DEMON_HUNTER))
         {
             return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
         }
@@ -2452,6 +2453,7 @@ InventoryResult Player::CanRollForItemInLFG(ItemTemplate const* proto, WorldObje
             case CLASS_SHAMAN:
                 subclassToCompare = ITEM_SUBCLASS_ARMOR_MAIL;
                 break;
+            case CLASS_DEMON_HUNTER:
             case CLASS_ROGUE:
                 if (proto->HasStat(ITEM_MOD_SPELL_POWER) || proto->HasSpellPowerStat())
                 {
@@ -2459,6 +2461,7 @@ InventoryResult Player::CanRollForItemInLFG(ItemTemplate const* proto, WorldObje
                 }
                 [[fallthrough]];
             case CLASS_DRUID:
+            case CLASS_MONK:
                 subclassToCompare = ITEM_SUBCLASS_ARMOR_LEATHER;
                 break;
             default:

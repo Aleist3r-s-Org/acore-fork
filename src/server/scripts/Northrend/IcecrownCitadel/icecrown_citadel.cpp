@@ -2949,6 +2949,8 @@ SeveredEssenceSpellInfo sesi_spells[] =
     {CLASS_WARRIOR, 71552, 5000, 1, 0.0f},
     {CLASS_HUNTER, 36984, 7000, 1, 0.0f},
     {CLASS_HUNTER, 29576, 5000, 1, 0.0f},
+    //{CLASS_MONK, 0, 0, 0, 0.0f}
+    //{CLASS_DEMON_HUNTER, 0, 0, 0, 0.0f}
     {0, 0, 0, 0, 0.0f},
 };
 

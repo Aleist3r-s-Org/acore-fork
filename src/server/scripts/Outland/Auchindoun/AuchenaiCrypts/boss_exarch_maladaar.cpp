@@ -237,6 +237,20 @@ struct npc_stolen_soul : public ScriptedAI
                         context.Repeat(6s);
                     });
                     break;
+                case CLASS_MONK:    // TODO
+                    _scheduler.Schedule(0ms, [this](TaskContext context)
+                    {
+                        //DoCastVictim();
+                        //context.Repeat();
+                    });
+                    break;
+                case CLASS_DEMON_HUNTER:    // TODO
+                    _scheduler.Schedule(0ms, [this](TaskContext context)
+                    {
+                        //DoCastVictim();
+                        //context.Repeat();
+                    });
+                    break;
             }
         });
     }

@@ -91,7 +91,9 @@ enum Says
     SAY_WARLOCK                = 10,
     SAY_HUNTER                 = 11,
     SAY_ROGUE                  = 12,
-    SAY_DEATH_KNIGHT           = 13
+    SAY_DEATH_KNIGHT           = 13,
+    SAY_MONK                   = 14,
+    SAY_DEMON_HUNTER           = 15
 };
 
 enum Gossip
@@ -167,6 +169,8 @@ enum Spells
     SPELL_ROGUE                     = 23414,     // Paralise
     SPELL_DEATH_KNIGHT              = 49576,     // Death Grip
     SPELL_ROOT_SELF                 = 17507,
+    SPELL_MONK                      = 1,         // Placeholder // TODO
+    SPELL_DEMON_HUNTER              = 1,         // Placeholder // TODO
 
     // Class Call effects
     SPELL_POLYMORPH                 = 23603,
@@ -744,6 +748,14 @@ struct boss_nefarian : public BossAI
                                     }
                                 });
                                 break;
+                            case CLASS_MONK:
+                                Talk(SAY_MONK);
+                                DoCast(me, SPELL_MONK);
+                                break;
+                            case CLASS_DEMON_HUNTER:
+                                Talk(SAY_DEMON_HUNTER);
+                                DoCast(me, SPELL_DEMON_HUNTER);
+                                break;
                             default:
                                 break;
                         }
@@ -1010,7 +1022,10 @@ std::unordered_map<uint32, uint8> const classCallSpells =
     { SPELL_SHAMAN, CLASS_SHAMAN },
     { SPELL_WARLOCK, CLASS_WARLOCK },
     { SPELL_HUNTER, CLASS_HUNTER },
-    { SPELL_ROGUE, CLASS_ROGUE }
+    { SPELL_ROGUE, CLASS_ROGUE },
+    { SPELL_DEATH_KNIGHT, CLASS_DEATH_KNIGHT },
+    { SPELL_MONK, CLASS_MONK },
+    { SPELL_DEMON_HUNTER, CLASS_DEMON_HUNTER }
 };
 
 class spell_class_call_handler : public SpellScript
