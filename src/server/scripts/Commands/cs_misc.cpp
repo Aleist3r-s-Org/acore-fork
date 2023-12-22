@@ -2185,11 +2185,21 @@ public:
             case RACE_TROLL:
                 raceStr = "Troll";
                 break;
+            case RACE_GOBLIN:
+                raceStr = "Goblin";
+                break;
             case RACE_BLOODELF:
                 raceStr = "Blood Elf";
                 break;
             case RACE_DRAENEI:
                 raceStr = "Draenei";
+                break;
+            case RACE_WORGEN:
+                raceStr = "Worgen";
+                break;
+            case RACE_PANDAREN_ALLIANCE:
+            case RACE_PANDAREN_HORDE:
+                raceStr = "Pandaren";
                 break;
         }
 

@@ -301,7 +301,10 @@ LanguageDesc lang_description[LANGUAGES_COUNT] =
     { LANG_DRAENEI,     29932, SKILL_LANG_DRAENEI      },
     { LANG_ZOMBIE,          0, 0                       },
     { LANG_GNOMISH_BINARY,  0, 0                       },
-    { LANG_GOBLIN_BINARY,   0, 0                       }
+    { LANG_GOBLIN_BINARY,   0, 0                       },
+    { LANG_GOBLIN,     101001, SKILL_LANG_GOBLIN       },
+    { LANG_GILNEAN,    101002, SKILL_LANG_GILNEAN      },
+    { LANG_PANDAREN,   101003, SKILL_LANG_PANDAREN     }
 };
 
 LanguageDesc const* GetLanguageDescByID(uint32 lang)
@@ -3037,8 +3040,14 @@ void ObjectMgr::LoadItemTemplates()
 
             switch (itemTemplate.ItemStat[j].ItemStatType)
             {
+                case ITEM_MOD_HIT_MELEE_RATING:
+                case ITEM_MOD_HIT_RANGED_RATING:
+                case ITEM_MOD_HIT_SPELL_RATING:
+                case ITEM_MOD_HIT_RATING:
                 case ITEM_MOD_SPELL_HEALING_DONE:
+                case ITEM_MOD_RANGED_ATTACK_POWER:
                 case ITEM_MOD_SPELL_DAMAGE_DONE:
+                case ITEM_MOD_ARMOR_PENETRATION_RATING:
                     LOG_ERROR("sql.sql", "Item (Entry: {}) has deprecated stat_type{} ({})", entry, j + 1, itemTemplate.ItemStat[j].ItemStatType);
                     break;
                 default:
@@ -4185,14 +4194,6 @@ void ObjectMgr::LoadPlayerInfo()
                 PlayerClassInfo* pClassInfo = _playerClassInfo[class_];
                 PlayerInfo* info = _playerInfo[race][class_];
                 if (!info)
-                    continue;
-
-                // skip expansion races if not playing with expansion
-                if (sWorld->getIntConfig(CONFIG_EXPANSION) < EXPANSION_THE_BURNING_CRUSADE && (race == RACE_BLOODELF || race == RACE_DRAENEI))
-                    continue;
-
-                // skip expansion classes if not playing with expansion
-                if (sWorld->getIntConfig(CONFIG_EXPANSION) < EXPANSION_WRATH_OF_THE_LICH_KING && class_ == CLASS_DEATH_KNIGHT)
                     continue;
 
                 // fatal error if no initial stats data

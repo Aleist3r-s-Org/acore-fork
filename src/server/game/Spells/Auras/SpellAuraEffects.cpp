@@ -1874,6 +1874,8 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
     {
         case FORM_CAT:                                      // 0x01
         case FORM_GHOUL:                                    // 0x07
+        case FORM_OXSTANCE:                                 // 0x17
+        case FORM_TIGERSTANCE:                              // 0x18
             PowerType = POWER_ENERGY;
             break;
 
@@ -1900,7 +1902,10 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
         case FORM_CREATURECAT:                              // 0x0F
         case FORM_GHOSTWOLF:                                // 0x10
 
-        case FORM_TEST:                                     // 0x14
+        case FORM_SERPENTSTANCE:                            // 0x14
+            PowerType = POWER_MANA;                         // this thing probably shouldn't even be here, just a failsafe
+            break;
+
         case FORM_ZOMBIE:                                   // 0x15
         case FORM_METAMORPHOSIS:                            // 0x16
         case FORM_UNDEAD:                                   // 0x19
@@ -2032,6 +2037,12 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
             {
                 target->setPowerType(POWER_MANA);
                 // Remove movement impairing effects also when shifting out
+                target->RemoveAurasByShapeShift();
+            }
+
+            if (target->getClass() == CLASS_MONK)
+            {
+                target->setPowerType(POWER_ENERGY);
                 target->RemoveAurasByShapeShift();
             }
         }

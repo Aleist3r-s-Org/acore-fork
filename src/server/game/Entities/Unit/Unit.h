@@ -107,9 +107,11 @@ enum ShapeshiftForm
     FORM_BATTLESTANCE       = 0x11,
     FORM_DEFENSIVESTANCE    = 0x12,
     FORM_BERSERKERSTANCE    = 0x13,
-    FORM_TEST               = 0x14,
+    FORM_SERPENTSTANCE      = 0x14,
     FORM_ZOMBIE             = 0x15,
     FORM_METAMORPHOSIS      = 0x16,
+    FORM_OXSTANCE           = 0x17,
+    FORM_TIGERSTANCE        = 0x18,
     FORM_UNDEAD             = 0x19,
     FORM_MASTER_ANGLER      = 0x1A,
     FORM_FLIGHT_EPIC        = 0x1B,
@@ -406,9 +408,9 @@ enum CombatRating
     CR_DODGE                    = 2,
     CR_PARRY                    = 3,
     CR_BLOCK                    = 4,
-    CR_HIT_MELEE                = 5,
-    CR_HIT_RANGED               = 6,
-    CR_HIT_SPELL                = 7,
+    CR_HIT_MELEE                = 5,    // Deprecated
+    CR_HIT_RANGED               = 6,    // Deprecated
+    CR_HIT_SPELL                = 7,    // Deprecated
     CR_CRIT_MELEE               = 8,
     CR_CRIT_RANGED              = 9,
     CR_CRIT_SPELL               = 10,
@@ -424,8 +426,8 @@ enum CombatRating
     CR_WEAPON_SKILL_MAINHAND    = 20,
     CR_WEAPON_SKILL_OFFHAND     = 21,
     CR_WEAPON_SKILL_RANGED      = 22,
-    CR_EXPERTISE                = 23,
-    CR_ARMOR_PENETRATION        = 24
+    CR_EXPERTISE                = 23,   // Deprecated
+    CR_ARMOR_PENETRATION        = 24    // Deprecated - move to SPELL_AURA_MOD_ARMOR_PENETRATION
 };
 
 #define MAX_COMBAT_RATING         25

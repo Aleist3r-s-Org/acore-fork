@@ -1692,7 +1692,7 @@ public:
                         pclass = gpd->Class;
                     }
 
-                    if (plevel > 0 && prace > 0 && prace <= RACE_DRAENEI && pclass > 0 && pclass <= CLASS_DEMON_HUNTER)
+                    if (plevel > 0 && prace > 0 && prace <= RACE_PANDAREN_HORDE && pclass > 0 && pclass <= CLASS_DEMON_HUNTER)
                     {
                         handler->PSendSysMessage("  %s (GUID %u) - %s - %s - %u%s", name.c_str(), guid, EnumUtils::ToTitle(Races(prace)), EnumUtils::ToTitle(Classes(pclass)), plevel, (online ? " - [ONLINE]" : ""));
                     }

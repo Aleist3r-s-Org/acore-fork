@@ -290,9 +290,9 @@ Unit::Unit(bool isWorldObject) : WorldObject(isWorldObject),
         m_createStats[i] = 0.0f;
 
     m_attacking = nullptr;
-    m_modMeleeHitChance = 0.0f;
-    m_modRangedHitChance = 0.0f;
-    m_modSpellHitChance = 0.0f;
+    m_modMeleeHitChance = 8.0f;
+    m_modRangedHitChance = 8.0f;
+    m_modSpellHitChance = 17.0f;
     m_baseSpellCritChance = 5;
 
     m_CombatTimer = 0;
@@ -19504,6 +19504,14 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
                             return 892;
                     }
                 }
+                else if (getRace() == RACE_TROLL)   // TODO: set up with backported models
+                {
+                    uint8 hairColor = GetByteValue(PLAYER_BYTES, 3);
+                    switch (hairColor)
+                    {
+
+                    }
+                }
                 // Based on Skin color
                 else if (getRace() == RACE_TAUREN)
                 {
@@ -19539,23 +19547,40 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
                     }
                     // Female
                     else switch (skinColor)
+                    {
+                        case 10: // White
+                            return 29409;
+                        case 6: // Light Brown
+                        case 7:
+                            return 29410;
+                        case 4: // Brown
+                        case 5:
+                            return 29411;
+                        case 0: // Dark
+                        case 1:
+                        case 2:
+                        case 3:
+                            return 29412;
+                        default: // original - Grey
+                            return 8571;
+                    }
+                }
+                else if (getRace() == RACE_WORGEN)  // TODO: set up with backported models
+                {
+                    uint8 skinColor = GetByteValue(PLAYER_BYTES, 0);
+                    // Male
+                    if (getGender() == GENDER_MALE)
+                    {
+                        switch (skinColor)
                         {
-                            case 10: // White
-                                return 29409;
-                            case 6: // Light Brown
-                            case 7:
-                                return 29410;
-                            case 4: // Brown
-                            case 5:
-                                return 29411;
-                            case 0: // Dark
-                            case 1:
-                            case 2:
-                            case 3:
-                                return 29412;
-                            default: // original - Grey
-                                return 8571;
+
                         }
+                    }
+                    // Female
+                    else switch (skinColor)
+                    {
+
+                    }
                 }
                 else if (Player::TeamIdForRace(getRace()) == TEAM_ALLIANCE)
                     return 892;
@@ -19581,6 +19606,14 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
                             return 29417;
                         default: // original - Violet
                             return 2281;
+                    }
+                }
+                else if (getRace() == RACE_TROLL)   // TODO: set up with backported models
+                {
+                    uint8 hairColor = GetByteValue(PLAYER_BYTES, 3);
+                    switch (hairColor)
+                    {
+
                     }
                 }
                 // Based on Skin color
@@ -19618,23 +19651,39 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
                     }
                     // Female
                     else switch (skinColor)
+                    {
+                        case 0: // Dark (Black)
+                        case 1:
+                            return 29418;
+                        case 2: // White
+                        case 3:
+                            return 29419;
+                        case 6: // Light Brown/Grey
+                        case 7:
+                        case 8:
+                        case 9:
+                            return 29420;
+                        case 10: // Completly White
+                            return 29421;
+                        default: // original - Brown
+                            return 2289;
+                    }
+                }
+                else if (getRace() == RACE_WORGEN)  // TODO: set up with backported models
+                {
+                    uint8 skinColor = GetByteValue(PLAYER_BYTES, 0);
+                    // Male
+                    if (getGender() == GENDER_MALE)
+                    {
+                        switch (skinColor)
                         {
-                            case 0: // Dark (Black)
-                            case 1:
-                                return 29418;
-                            case 2: // White
-                            case 3:
-                                return 29419;
-                            case 6: // Light Brown/Grey
-                            case 7:
-                            case 8:
-                            case 9:
-                                return 29420;
-                            case 10: // Completly White
-                                return 29421;
-                            default: // original - Brown
-                                return 2289;
+
                         }
+                    }
+                    // Female
+                    else switch (skinColor)
+                    {
+                    }
                 }
                 else if (Player::TeamIdForRace(getRace()) == TEAM_ALLIANCE)
                     return 2281;
@@ -19646,8 +19695,15 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
                 return 20872;
             case FORM_FLIGHT_EPIC:
                 if (Player::TeamIdForRace(getRace()) == TEAM_ALLIANCE)
-                    return 21243;
+                    return (getRace() == RACE_WORGEN ? 0 : 21243);  // TODO: set up with backported models
+                if (getRace() == RACE_TROLL)
+                    return 0;
                 return 21244;
+            case FORM_MOONKIN:  // TODO: set up with backported models? just texture swap? i dunno
+                if (getRace() == RACE_TROLL)
+                    return 0;
+                if (getRace() == RACE_WORGEN)
+                    return 0;
             default:
                 break;
         }
@@ -19740,6 +19796,19 @@ uint32 Unit::GetModelForTotem(PlayerTotemType totemType)
                 }
                 break;
             }
+        case RACE_GOBLIN:
+            switch (totemType)
+            {
+            case SUMMON_TYPE_TOTEM_FIRE:    // fire
+                return 32757;
+            case SUMMON_TYPE_TOTEM_EARTH:   // earth
+                return 32756;
+            case SUMMON_TYPE_TOTEM_WATER:   // water
+                return 32758;
+            case SUMMON_TYPE_TOTEM_AIR:     // air
+                return 32755;
+            }
+            break;
         case RACE_DRAENEI:
             {
                 switch (totemType)
@@ -19755,6 +19824,20 @@ uint32 Unit::GetModelForTotem(PlayerTotemType totemType)
                 }
                 break;
             }
+        case RACE_PANDAREN_ALLIANCE:
+        case RACE_PANDAREN_HORDE:
+            switch (totemType)
+            {
+            case SUMMON_TYPE_TOTEM_FIRE:    // fire
+                return 32761;
+            case SUMMON_TYPE_TOTEM_EARTH:   // earth
+                return 32760;
+            case SUMMON_TYPE_TOTEM_WATER:   // water
+                return 32762;
+            case SUMMON_TYPE_TOTEM_AIR:     // air
+                return 32759;
+            }
+            break;
         default: // One standard for other races.
             {
                 switch (totemType)

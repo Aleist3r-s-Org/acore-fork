@@ -2151,6 +2151,12 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
             case RACE_NIGHTELF:
                 stmt->SetData(1, 113);
                 break;
+            case RACE_WORGEN:
+                stmt->SetData(1, 113);
+                break;
+            case RACE_PANDAREN_ALLIANCE:
+                stmt->SetData(1, 800);
+                break;
             case RACE_UNDEAD_PLAYER:
                 stmt->SetData(1, 673);
                 break;
@@ -2160,8 +2166,14 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
             case RACE_TROLL:
                 stmt->SetData(1, 315);
                 break;
+            case RACE_GOBLIN:
+                stmt->SetData(1, 796);
+                break;
             case RACE_BLOODELF:
                 stmt->SetData(1, 137);
+                break;
+            case RACE_PANDAREN_HORDE:
+                stmt->SetData(1, 800);
                 break;
             }
 

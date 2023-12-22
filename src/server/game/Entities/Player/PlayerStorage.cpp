@@ -4510,18 +4510,6 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                             ApplyRatingMod(CR_BLOCK, enchant_amount, apply);
                             LOG_DEBUG("entities.player.items", "+ {} SHIELD_BLOCK", enchant_amount);
                             break;
-                        case ITEM_MOD_HIT_MELEE_RATING:
-                            ApplyRatingMod(CR_HIT_MELEE, enchant_amount, apply);
-                            LOG_DEBUG("entities.player.items", "+ {} MELEE_HIT", enchant_amount);
-                            break;
-                        case ITEM_MOD_HIT_RANGED_RATING:
-                            ApplyRatingMod(CR_HIT_RANGED, enchant_amount, apply);
-                            LOG_DEBUG("entities.player.items", "+ {} RANGED_HIT", enchant_amount);
-                            break;
-                        case ITEM_MOD_HIT_SPELL_RATING:
-                            ApplyRatingMod(CR_HIT_SPELL, enchant_amount, apply);
-                            LOG_DEBUG("entities.player.items", "+ {} SPELL_HIT", enchant_amount);
-                            break;
                         case ITEM_MOD_CRIT_MELEE_RATING:
                             ApplyRatingMod(CR_CRIT_MELEE, enchant_amount, apply);
                             LOG_DEBUG("entities.player.items", "+ {} MELEE_CRIT", enchant_amount);
@@ -4563,12 +4551,6 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                         case ITEM_MOD_HASTE_SPELL_RATING:
                             ApplyRatingMod(CR_HASTE_SPELL, enchant_amount, apply);
                             break;
-                        case ITEM_MOD_HIT_RATING:
-                            ApplyRatingMod(CR_HIT_MELEE, enchant_amount, apply);
-                            ApplyRatingMod(CR_HIT_RANGED, enchant_amount, apply);
-                            ApplyRatingMod(CR_HIT_SPELL, enchant_amount, apply);
-                            LOG_DEBUG("entities.player.items", "+ {} HIT", enchant_amount);
-                            break;
                         case ITEM_MOD_CRIT_RATING:
                             ApplyRatingMod(CR_CRIT_MELEE, enchant_amount, apply);
                             ApplyRatingMod(CR_CRIT_RANGED, enchant_amount, apply);
@@ -4598,18 +4580,10 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                             ApplyRatingMod(CR_HASTE_SPELL, enchant_amount, apply);
                             LOG_DEBUG("entities.player.items", "+ {} HASTE", enchant_amount);
                             break;
-                        case ITEM_MOD_EXPERTISE_RATING:
-                            ApplyRatingMod(CR_EXPERTISE, enchant_amount, apply);
-                            LOG_DEBUG("entities.player.items", "+ {} EXPERTISE", enchant_amount);
-                            break;
                         case ITEM_MOD_ATTACK_POWER:
                             HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, float(enchant_amount), apply);
                             HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
                             LOG_DEBUG("entities.player.items", "+ {} ATTACK_POWER", enchant_amount);
-                            break;
-                        case ITEM_MOD_RANGED_ATTACK_POWER:
-                            HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
-                            LOG_DEBUG("entities.player.items", "+ {} RANGED_ATTACK_POWER", enchant_amount);
                             break;
                             //                        case ITEM_MOD_FERAL_ATTACK_POWER:
                             //                            ApplyFeralAPBonus(enchant_amount, apply);
@@ -4618,10 +4592,6 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                         case ITEM_MOD_MANA_REGENERATION:
                             ApplyManaRegenBonus(enchant_amount, apply);
                             LOG_DEBUG("entities.player.items", "+ {} MANA_REGENERATION", enchant_amount);
-                            break;
-                        case ITEM_MOD_ARMOR_PENETRATION_RATING:
-                            ApplyRatingMod(CR_ARMOR_PENETRATION, enchant_amount, apply);
-                            LOG_DEBUG("entities.player.items", "+ {} ARMOR PENETRATION", enchant_amount);
                             break;
                         case ITEM_MOD_SPELL_POWER:
                             ApplySpellPowerBonus(enchant_amount, apply);
@@ -4639,8 +4609,16 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                             HandleBaseModValue(SHIELD_BLOCK_VALUE, FLAT_MOD, float(enchant_amount), apply);
                             LOG_DEBUG("entities.player.items", "+ {} BLOCK_VALUE", enchant_amount);
                             break;
-                        case ITEM_MOD_SPELL_HEALING_DONE:   // deprecated
-                        case ITEM_MOD_SPELL_DAMAGE_DONE:    // deprecated
+                        // deprecated mods, will be phased out later
+                        case ITEM_MOD_HIT_MELEE_RATING:
+                        case ITEM_MOD_HIT_RANGED_RATING:
+                        case ITEM_MOD_HIT_SPELL_RATING:
+                        case ITEM_MOD_HIT_RATING:
+                        case ITEM_MOD_EXPERTISE_RATING:
+                        case ITEM_MOD_RANGED_ATTACK_POWER:
+                        case ITEM_MOD_SPELL_HEALING_DONE:
+                        case ITEM_MOD_SPELL_DAMAGE_DONE:
+                        case ITEM_MOD_ARMOR_PENETRATION_RATING:
                         default:
                             break;
                     }

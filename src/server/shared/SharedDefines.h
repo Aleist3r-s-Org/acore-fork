@@ -76,33 +76,39 @@ enum Races
     RACE_TAUREN             = 6,  // TITLE Tauren
     RACE_GNOME              = 7,  // TITLE Gnome
     RACE_TROLL              = 8,  // TITLE Troll
-    //RACE_GOBLIN             = 9,
+    RACE_GOBLIN             = 9,  // TITLE Goblin
     RACE_BLOODELF           = 10, // TITLE Blood Elf
-    RACE_DRAENEI            = 11 //, TITLE Draenei
-    //RACE_FEL_ORC        = 12,
-    //RACE_NAGA           = 13,
-    //RACE_BROKEN         = 14,
-    //RACE_SKELETON       = 15,
-    //RACE_VRYKUL         = 16,
-    //RACE_TUSKARR        = 17,
-    //RACE_FOREST_TROLL   = 18,
-    //RACE_TAUNKA         = 19,
+    RACE_DRAENEI            = 11, // TITLE Draenei
+    //RACE_FEL_ORC            = 12,
+    //RACE_NAGA               = 13,
+    //RACE_BROKEN             = 14,
+    //RACE_SKELETON           = 15,
+    //RACE_VRYKUL             = 16,
+    //RACE_TUSKARR            = 17,
+    //RACE_FOREST_TROLL       = 18,
+    //RACE_TAUNKA             = 19,
     //RACE_NORTHREND_SKELETON = 20,
-    //RACE_ICE_TROLL      = 21
+    //RACE_ICE_TROLL          = 21,
+    RACE_WORGEN             = 22, // TITLE Worgen
+    //RACE_GILNEAN            = 23,
+    RACE_PANDAREN_ALLIANCE  = 24, // TITLE Pandaren
+    RACE_PANDAREN_HORDE     = 25  // TITLE Pandaren
 };
 
 // max+1 for player race
-#define MAX_RACES         12
+#define MAX_RACES         26
 
 #define RACEMASK_ALL_PLAYABLE \
     ((1<<(RACE_HUMAN-1))   |(1<<(RACE_ORC-1))          |(1<<(RACE_DWARF-1))   | \
-    (1<<(RACE_NIGHTELF-1))|(1<<(RACE_UNDEAD_PLAYER-1))|(1<<(RACE_TAUREN-1))  | \
-    (1<<(RACE_GNOME-1))   |(1<<(RACE_TROLL-1))        |(1<<(RACE_BLOODELF-1))| \
-    (1<<(RACE_DRAENEI-1)))
+    (1<<(RACE_NIGHTELF-1)) |(1<<(RACE_UNDEAD_PLAYER-1))|(1<<(RACE_TAUREN-1))  | \
+    (1<<(RACE_GNOME-1))    |(1<<(RACE_TROLL-1))        |(1<<(RACE_BLOODELF-1))| \
+    (1<<(RACE_DRAENEI-1))  |(1<<(RACE_GOBLIN-1))       |(1<<(RACE_WORGEN-1))  | \
+    (1<<(RACE_PANDAREN_ALLIANCE-1)|(1<<(RACE_PANDAREN_HORDE-1))))
 
 #define RACEMASK_ALLIANCE \
-    ((1<<(RACE_HUMAN-1)) | (1<<(RACE_DWARF-1)) | (1<<(RACE_NIGHTELF-1)) | \
-    (1<<(RACE_GNOME-1)) | (1<<(RACE_DRAENEI-1)))
+    ((1<<(RACE_HUMAN-1)) | (1<<(RACE_DWARF-1))  | (1<<(RACE_NIGHTELF-1)) | \
+    (1<<(RACE_GNOME-1))  | (1<<(RACE_DRAENEI-1))| (1<<(RACE_WORGEN-1))   | \
+    (1<<(RACE_PANDAREN_ALLIANCE-1)))
 
 #define RACEMASK_HORDE RACEMASK_ALL_PLAYABLE & ~RACEMASK_ALLIANCE
 
@@ -751,10 +757,13 @@ enum Language
     LANG_ZOMBIE         = 36,
     LANG_GNOMISH_BINARY = 37,
     LANG_GOBLIN_BINARY  = 38,
+    LANG_GOBLIN         = 39,
+    LANG_GILNEAN        = 40,
+    LANG_PANDAREN       = 41,
     LANG_ADDON          = 0xFFFFFFFF                        // used by addons, in 2.4.0 not exist, replaced by messagetype?
 };
 
-#define LANGUAGES_COUNT   19
+#define LANGUAGES_COUNT   22
 
 enum TeamId : uint8
 {
@@ -3026,10 +3035,16 @@ enum SkillType
     SKILL_MONK_WINDWALKER          = 792,
     SKILL_DH_ANGUISH               = 793,
     SKILL_DH_HAVOC                 = 794,
-    SKILL_DH_VENGEANCE             = 795
+    SKILL_DH_VENGEANCE             = 795,
+    SKILL_LANG_GOBLIN              = 796,
+    SKILL_RACIAL_GOBLIN            = 797,
+    SKILL_LANG_GILNEAN             = 798,
+    SKILL_RACIAL_WORGEN            = 799,
+    SKILL_LANG_PANDAREN            = 800,
+    SKILL_RACIAL_PANDAREN          = 801
 };
 
-#define MAX_SKILL_TYPE               796
+#define MAX_SKILL_TYPE               802
 
 inline SkillType SkillByLockType(LockType locktype)
 {

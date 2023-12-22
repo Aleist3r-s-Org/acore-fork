@@ -866,19 +866,16 @@ void Player::UpdateArmorPenetration(int32 amount)
 void Player::UpdateMeleeHitChances()
 {
     m_modMeleeHitChance = (float)GetTotalAuraModifier(SPELL_AURA_MOD_HIT_CHANCE);
-    m_modMeleeHitChance += GetRatingBonusValue(CR_HIT_MELEE);
 }
 
 void Player::UpdateRangedHitChances()
 {
     m_modRangedHitChance = (float)GetTotalAuraModifier(SPELL_AURA_MOD_HIT_CHANCE);
-    m_modRangedHitChance += GetRatingBonusValue(CR_HIT_RANGED);
 }
 
 void Player::UpdateSpellHitChances()
 {
     m_modSpellHitChance = (float)GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_HIT_CHANCE);
-    m_modSpellHitChance += GetRatingBonusValue(CR_HIT_SPELL);
 }
 
 void Player::UpdateAllSpellCritChances()
@@ -892,7 +889,7 @@ void Player::UpdateExpertise(WeaponAttackType attack)
     if (attack == RANGED_ATTACK)
         return;
 
-    int32 expertise = int32(GetRatingBonusValue(CR_EXPERTISE));
+    int32 expertise = 56;
 
     Item* weapon = GetWeaponForAttack(attack, true);
 

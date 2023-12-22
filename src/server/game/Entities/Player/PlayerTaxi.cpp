@@ -22,51 +22,34 @@
 
 void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level)
 {
-    // class specific initial known nodes
-    switch (chrClass)
-    {
-        case CLASS_DEATH_KNIGHT:
-        {
-            for (uint8 i = 0; i < TaxiMaskSize; ++i)
-                m_taximask[i] |= sOldContinentsNodesMask[i];
-            break;
-        }
-    }
-
     // race specific initial known nodes: capital and taxi hub masks
     switch (race)
     {
         case RACE_HUMAN:
-            SetTaximaskNode(2);
-            break;     // Human
-        case RACE_ORC:
-            SetTaximaskNode(23);
-            break;     // Orc
         case RACE_DWARF:
-            SetTaximaskNode(6);
-            break;     // Dwarf
         case RACE_NIGHTELF:
+        case RACE_GNOME:
+        case RACE_DRAENEI:
+        case RACE_WORGEN:
+        case RACE_PANDAREN_ALLIANCE:
+            SetTaximaskNode(2);
+            SetTaximaskNode(6);
             SetTaximaskNode(26);
             SetTaximaskNode(27);
-            break;     // Night Elf
-        case RACE_UNDEAD_PLAYER:
-            SetTaximaskNode(11);
-            break;// Undead
-        case RACE_TAUREN:
-            SetTaximaskNode(22);
-            break;     // Tauren
-        case RACE_GNOME:
-            SetTaximaskNode(6);
-            break;     // Gnome
-        case RACE_TROLL:
-            SetTaximaskNode(23);
-            break;     // Troll
-        case RACE_BLOODELF:
-            SetTaximaskNode(82);
-            break;     // Blood Elf
-        case RACE_DRAENEI:
             SetTaximaskNode(94);
-            break;     // Draenei
+            break;
+        case RACE_ORC:
+        case RACE_UNDEAD_PLAYER:
+        case RACE_TAUREN:
+        case RACE_TROLL:
+        case RACE_GOBLIN:
+        case RACE_BLOODELF:
+        case RACE_PANDAREN_HORDE:
+            SetTaximaskNode(11);
+            SetTaximaskNode(22);
+            SetTaximaskNode(23);
+            SetTaximaskNode(82);
+            break;
     }
 
     // new continent starting masks (It will be accessible only at new map)
@@ -82,7 +65,7 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
             break;
     }
     // level dependent taxi hubs
-    if (level >= 68)
+    if (level >= 60)
         SetTaximaskNode(213);                               //Shattered Sun Staging Area
 }
 
