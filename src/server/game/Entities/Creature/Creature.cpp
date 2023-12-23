@@ -958,6 +958,8 @@ void Creature::Regenerate(Powers power)
 
 void Creature::RegenerateHealth()
 {
+    ToggleOnHealthPctAuras();
+
     if (!isRegeneratingHealth())
         return;
 

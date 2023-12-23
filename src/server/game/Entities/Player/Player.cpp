@@ -754,6 +754,8 @@ uint32 Player::EnvironmentalDamage(EnviromentalDamage type, uint32 damage)
     if (IsImmuneToEnvironmentalDamage())
         return 0;
 
+    damage *= GetTotalAuraMultiplier(SPELL_AURA_MOD_ENVIRONMENTAL_DAMAGE_TAKEN_PCT);
+
     // Absorb, resist some environmental damage type
     uint32 absorb = 0;
     uint32 resist = 0;
@@ -1739,7 +1741,7 @@ void Player::RegenerateAll()
     m_foodEmoteTimerCount += m_regenTimer;
 
     Regenerate(POWER_ENERGY);
-
+    Regenerate(POWER_FOCUS);
     Regenerate(POWER_MANA);
 
     // Runes act as cooldowns, and they don't need to send any data
@@ -1773,8 +1775,7 @@ void Player::RegenerateAll()
         }
 
         Regenerate(POWER_RAGE);
-        if (getClass() == CLASS_DEATH_KNIGHT)
-            Regenerate(POWER_RUNIC_POWER);
+        Regenerate(POWER_RUNIC_POWER);
 
         m_regenTimerCount -= 2000;
     }
@@ -1815,6 +1816,8 @@ void Player::RegenerateAll()
 
 void Player::Regenerate(Powers power)
 {
+    ToggleOnPowerPctAuras();
+
     uint32 maxValue = GetMaxPower(power);
     if (!maxValue)
         return;
@@ -1964,6 +1967,8 @@ void Player::Regenerate(Powers power)
 
 void Player::RegenerateHealth()
 {
+    ToggleOnHealthPctAuras();
+
     uint32 curValue = GetHealth();
     uint32 maxValue = GetMaxHealth();
 
@@ -4728,6 +4733,9 @@ void Player::DurabilityPointsLoss(Item* item, int32 points)
 
 void Player::DurabilityPointLossForEquipSlot(EquipmentSlots slot)
 {
+    if (HasAuraType(SPELL_AURA_PREVENT_DURABILITY_LOSS_FROM_COMBAT))
+        return;
+
     if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
         DurabilityPointsLoss(pItem, 1);
 }
@@ -12242,6 +12250,9 @@ float Player::GetReputationPriceDiscount(Creature const* creature) const
 
 float Player::GetReputationPriceDiscount(FactionTemplateEntry const* factionTemplate) const
 {
+    if (HasAuraType(SPELL_AURA_OVERRIDE_REPUTATION_DISCOUNT))
+        return 0.8f;
+
     if (!factionTemplate || !factionTemplate->faction)
     {
         return 1.0f;
@@ -13764,6 +13775,8 @@ void Player::HandleFall(MovementInfo const& movementInfo)
 
             //float height = movementInfo.pos.m_positionZ;
             //UpdateGroundPositionZ(movementInfo.pos.m_positionX, movementInfo.pos.m_positionY, height);
+
+            damage *= GetTotalAuraMultiplier(SPELL_AURA_MOD_FALL_DAMAGE_PCT);
 
             if (damage > 0)
             {

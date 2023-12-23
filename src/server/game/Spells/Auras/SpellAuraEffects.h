@@ -64,6 +64,7 @@ public:
     int32 GetAmount() const { return m_isAuraEnabled ? m_amount : 0; }
     int32 GetForcedAmount() const { return m_amount; }
     void SetAmount(int32 amount) { m_amount = amount; m_canBeRecalculated = false;}
+    uint32 GetTriggerSpell() const;
 
     int32 GetPeriodicTimer() const { return m_periodicTimer; }
     void SetPeriodicTimer(int32 periodicTimer) { m_periodicTimer = periodicTimer; }
@@ -293,6 +294,8 @@ public:
     void HandleAuraModRangedAttackPowerOfStatPercent(AuraApplication const* aurApp, uint8 mode, bool apply) const;
     void HandleAuraModAttackPowerOfStatPercent(AuraApplication const* aurApp, uint8 mode, bool apply) const;
     void HandleAuraModAttackPowerOfArmor(AuraApplication const* aurApp, uint8 mode, bool apply) const;
+    //  spell power
+    void HandleAuraModSpellPower(AuraApplication const* aurApp, uint8 mode, bool apply) const;
     //   damage bonus
     void HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, bool apply) const;
     void HandleModDamagePercentDone(AuraApplication const* aurApp, uint8 mode, bool apply) const;
@@ -320,6 +323,10 @@ public:
     void HandleAuraOverrideSpells(AuraApplication const* aurApp, uint8 mode, bool apply) const;
     void HandleAuraSetVehicle(AuraApplication const* aurApp, uint8 mode, bool apply) const;
     void HandlePreventResurrection(AuraApplication const* aurApp, uint8 mode, bool apply) const;
+    void HandleForceBreathBar(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const;
+    void HandleSetFFAPvP(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const;
+    void HandleTriggerSpellOnAuraStacks(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const;
+    void HandleTriggerSpellOnExpire(AuraApplication const* aurApp, uint8 mode, bool apply) const;
 
     // aura effect periodic tick handlers
     void HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const;
@@ -333,6 +340,7 @@ public:
     void HandleObsModPowerAuraTick(Unit* target, Unit* caster) const;
     void HandlePeriodicEnergizeAuraTick(Unit* target, Unit* caster) const;
     void HandlePeriodicPowerBurnAuraTick(Unit* target, Unit* caster) const;
+    void HandlePeriodicCooldownRecoveryTick(AuraApplication* aurApp, Unit* caster) const;
 
     // aura effect proc handlers
     void HandleProcTriggerSpellAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo);

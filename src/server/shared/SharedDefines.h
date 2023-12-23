@@ -136,7 +136,10 @@ enum class DisplayRace : uint8
     ForestTroll       = 18,
     Taunka            = 19,
     NorthrendSkeleton = 20,
-    IceTroll          = 21
+    IceTroll          = 21,
+    Worgen            = 22,
+    Gilnean           = 23,
+    Pandaren          = 24
 };
 
 // Class value is index in ChrClasses.dbc
@@ -155,7 +158,7 @@ enum Classes
     CLASS_WARLOCK       = 9, // TITLE Warlock
     CLASS_MONK          = 10, // TITLE Monk
     CLASS_DRUID         = 11, // TITLE Druid
-    CLASS_DEMON_HUNTER  = 12
+    CLASS_DEMON_HUNTER  = 12  // TITLE Demon Hunter
 };
 
 // max+1 for player class
@@ -950,7 +953,19 @@ enum SpellEffects
     SPELL_EFFECT_TALENT_SPEC_SELECT                 = 162,
     SPELL_EFFECT_163                                = 163,
     SPELL_EFFECT_REMOVE_AURA                        = 164,
-    TOTAL_SPELL_EFFECTS                             = 165
+    SPELL_EFFECT_GIVE_EXPERIENCE                    = 165,
+    SPELL_EFFECT_GIVE_RESTED_EXPERIENCE_BONUS       = 166,
+    SPELL_EFFECT_GIVE_HONOR                         = 167,
+    SPELL_EFFECT_RECEIVE_ITEM                       = 168,
+    SPELL_EFFECT_DESTROY_ITEM                       = 169,
+    SPELL_EFFECT_LEARN_TRANSMOG_ITEM                = 170,  // TODO: finish
+    SPELL_EFFECT_LEARN_TRANSMOG_SET                 = 171,  // TODO: finish
+    SPELL_EFFECT_LEARN_TRANSMOG_ILLUSION            = 172,  // TODO: finish
+    SPELL_EFFECT_JUMP_CHARGE                        = 173,
+    SPELL_EFFECT_MODIFY_CURRENT_SPELL_COOLDOWN      = 174,
+    SPELL_EFFECT_REMOVE_CURRENT_SPELL_COOLDOWN      = 175,
+    SPELL_EFFECT_DAMAGE_FROM_MAX_HEALTH_PCT         = 176,
+    TOTAL_SPELL_EFFECTS
 };
 
 // EnumUtils: DESCRIBE THIS

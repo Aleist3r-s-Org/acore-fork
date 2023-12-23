@@ -377,7 +377,44 @@ enum AuraType
     SPELL_AURA_PREVENT_RESURRECTION                         = 314,
     SPELL_AURA_UNDERWATER_WALKING                           = 315,
     SPELL_AURA_PERIODIC_HASTE                               = 316,
-    TOTAL_AURAS                                             = 317
+    SPELL_AURA_MOD_FALL_DAMAGE_PCT                          = 317,
+    SPELL_AURA_MOD_ENVIRONMENTAL_DAMAGE_TAKEN_PCT           = 318,
+    SPELL_AURA_PREVENT_DURABILITY_LOSS_FROM_COMBAT          = 319,
+    SPELL_AURA_FIND_TREASURE                                = 320,  // NYI
+    SPELL_AURA_OVERRIDE_REPUTATION_DISCOUNT                 = 321,
+    SPELL_AURA_MOD_MONEY_GAIN                               = 322,
+    SPELL_AURA_MOD_TAXI_FLIGHT_SPEED                        = 323,
+    SPELL_AURA_MOD_XP_FROM_CREATURE_TYPE                    = 324,
+    SPELL_AURA_FORCE_BREATH_BAR                             = 325,
+    SPELL_AURA_SET_FFA_PVP                                  = 326,
+    SPELL_AURA_ALLOW_BLOCKING_SPELLS                        = 327,
+    SPELL_AURA_ALLOW_DOUBLE_JUMP                            = 328,  // NYI
+    SPELL_AURA_ALLOW_GLIDE                                  = 329,  // NYI
+    SPELL_AURA_INTERRUPT_IMMUNITY                           = 330,
+    SPELL_AURA_KNOCKBACK_IMMUNITY                           = 331,
+    SPELL_AURA_TOGGLE_AURA_COMBAT_STATE                     = 332,
+    SPELL_AURA_TRIGGER_SPELL_ON_AURA_STACKS                 = 333,
+    SPELL_AURA_TRIGGER_SPELL_ON_EXPIRE                      = 334,
+    SPELL_AURA_TRIGGER_SPELL_ON_HEALTH_PCT                  = 335,
+    SPELL_AURA_TRIGGER_SPELL_ON_POWER_PCT                   = 336,
+    SPELL_AURA_MOD_ARMOR_PENETRATION                        = 337,  // Armor Penetration converted from rating to spell aura
+    SPELL_AURA_MOD_RATING_PCT                               = 338,
+    SPELL_AURA_MOD_RATING_BY_RATING_PCT                     = 339,
+    SPELL_AURA_MOD_RATING_FROM_ALL_SOURCES_BY_PCT           = 340,
+    SPELL_AURA_MOD_AUTOATTACK_DAMAGE                        = 341,
+    SPELL_AURA_MOD_AUTOATTACK_DAMAGE_PCT                    = 342,
+    SPELL_AURA_MOD_AUTOATTACK_RANGE                         = 343,
+    SPELL_AURA_MOD_SCHOOL_MASK_DAMAGE_VS_CASTER             = 344,
+    SPELL_AURA_MOD_SCHOOL_MASK_HEALING_VS_CASTER            = 345,
+    SPELL_AURA_MOD_SCHOOL_MASK_DAMAGE_FROM_CASTER           = 346,
+    SPELL_AURA_MOD_SCHOOL_MASK_HEALING_FROM_CASTER          = 347,
+    SPELL_AURA_MOD_SPELL_POWER                              = 348,
+    SPELL_AURA_MOD_SPELL_POWER_PCT                          = 349,
+    SPELL_AURA_MOD_SPELL_POWER_FROM_STAT_PERCENT            = 350,
+    SPELL_AURA_MOD_SPELL_POWER_FROM_RATING_PERCENT          = 351,
+    SPELL_AURA_MOD_RECOVERY_RATE                            = 352,
+    SPELL_AURA_MOD_CATEGORY_COOLDOWN                        = 353,  // NYI
+    TOTAL_AURAS
 };
 
 enum AuraObjectType

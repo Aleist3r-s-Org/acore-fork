@@ -413,6 +413,18 @@ public:
     void EffectRemoveAura(SpellEffIndex effIndex);
     void EffectCastButtons(SpellEffIndex effIndex);
     void EffectRechargeManaGem(SpellEffIndex effIndex);
+    void EffectGiveExperience(SpellEffIndex effIndex);
+    void EffectGiveRestedExperience(SpellEffIndex effIndex);
+    void EffectGiveHonor(SpellEffIndex effIndex);
+    void EffectReceiveItem(SpellEffIndex effIndex);
+    void EffectDestroyItem(SpellEffIndex effIndex);
+    void EffectLearnTransmogItem(SpellEffIndex effIndex);
+    void EffectLearnTransmogSet(SpellEffIndex effIndex);
+    void EffectLearnTransmogIllusion(SpellEffIndex effIndex);
+    void EffectJumpCharge(SpellEffIndex effIndex);
+    void EffectModifyCurrentSpellCooldown(SpellEffIndex effIndex);
+    void EffectRemoveCurrentSpellCooldown(SpellEffIndex effIndex);
+    void EffectDamageFromMaxHealthPct(SpellEffIndex effIndex);
 
     typedef std::set<Aura*> UsedSpellMods;
 

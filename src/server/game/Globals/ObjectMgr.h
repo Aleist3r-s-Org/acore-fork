@@ -1100,6 +1100,8 @@ public:
     void LoadTrainerSpell();
     void AddSpellToTrainer(uint32 entry, uint32 spell, uint32 spellCost, uint32 reqSkill, uint32 reqSkillValue, uint32 reqLevel, uint32 reqSpell);
 
+    void LoadJumpChargeParams();
+
     std::string GeneratePetName(uint32 entry);
     std::string GeneratePetNameLocale(uint32 entry, LocaleConstant locale);
     uint32 GetBaseXP(uint8 level);
@@ -1450,6 +1452,8 @@ public:
     uint8 GetInstanceSavedGameobjectState(uint32 id, uint32 guid);
     void SetInstanceSavedGameobjectState(uint32 id, uint32 guid, uint8 state);
     void NewInstanceSavedGameobjectState(uint32 id, uint32 guid, uint8 state);
+
+    JumpChargeParams const* GetJumpChargeParams(int32 id) const;
 private:
     // first free id for selected id type
     uint32 _auctionId; // pussywizard: accessed by a single thread
@@ -1635,6 +1639,8 @@ private:
         unsigned short m_state;
     };
     std::vector<GameobjectInstanceSavedState> GameobjectInstanceSavedStateList;
+
+    std::unordered_map<int32, JumpChargeParams> _jumpChargeParams;
 };
 
 #define sObjectMgr ObjectMgr::instance()

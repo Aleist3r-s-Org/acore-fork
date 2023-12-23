@@ -582,8 +582,33 @@ void Player::UpdateRating(CombatRating cr)
     for (AuraEffectList::const_iterator i = modRatingFromStat.begin();
          i != modRatingFromStat.end(); ++i)
         if ((*i)->GetMiscValue() & (1 << cr))
-            amount += int32(CalculatePct(GetStat(Stats((*i)->GetMiscValueB())),
-                                         (*i)->GetAmount()));
+            amount += int32(CalculatePct(GetStat(Stats((*i)->GetMiscValueB())), (*i)->GetAmount()));
+
+    // Apply bonus from SPELL_AURA_MOD_RATING_PCT
+    AuraEffectList const& modRatingPct = GetAuraEffectsByType(SPELL_AURA_MOD_RATING_PCT);
+    for (AuraEffectList::const_iterator i = modRatingPct.begin(); i != modRatingPct.end(); ++i)
+        if ((*i)->GetMiscValue() & (1 << cr))
+        {
+            uint8 level = GetLevel();
+            GtCombatRatingsEntry const* combatRating = sGtCombatRatingsStore.LookupEntry(cr * GT_MAX_LEVEL + level - 1);
+            float mult = combatRating->ratio;
+            amount += round((*i)->GetAmount() * mult);
+        }
+
+    // Apply bonus from SPELL_AURA_MOD_RATING_OF_RATING_PCT
+    AuraEffectList const& modRatingFromRating = GetAuraEffectsByType(SPELL_AURA_MOD_RATING_BY_RATING_PCT);
+    for (AuraEffectList::const_iterator i = modRatingFromRating.begin(); i != modRatingFromRating.end(); ++i)
+        if ((*i)->GetMiscValue() & (1 << cr))
+            for (int8 tempCr = 0; tempCr < MAX_COMBAT_RATING; ++tempCr)
+                if ((*i)->GetMiscValueB() & (1 << tempCr))
+                    amount = int32(CalculatePct(GetRatingBonusValue(CombatRating(tempCr)), (*i)->GetAmount()));
+
+    // now apply bonus from SPELL_AURA_MOD_RATING_FROM_ALL_SOURCES_BY_PCT, it is cummulative
+    AuraEffectList const& modRatingFromAllSourcesPct = GetAuraEffectsByType(SPELL_AURA_MOD_RATING_FROM_ALL_SOURCES_BY_PCT);
+    for (AuraEffectList::const_iterator i = modRatingFromAllSourcesPct.begin(); i != modRatingFromAllSourcesPct.end(); ++i)
+        if ((*i)->GetMiscValue() & (1 << cr))
+            amount = int32(CalculatePct(GetRatingBonusValue(cr), (*i)->GetAmount()));
+
     if (amount < 0)
         amount = 0;
     SetUInt32Value(static_cast<uint16>(PLAYER_FIELD_COMBAT_RATING_1) + static_cast<uint16>(cr), uint32(amount));
@@ -1414,7 +1439,7 @@ void Player::UpdateFFAPvPState(bool reset /*= true*/)
     // and controlled? no, we shouldn't, those are checked for affecting player
     // by client
     if (!pvpInfo.IsInNoPvPArea && !IsGameMaster() &&
-        (pvpInfo.IsInFFAPvPArea || sWorld->IsFFAPvPRealm()))
+        (pvpInfo.IsInFFAPvPArea || sWorld->IsFFAPvPRealm()) || HasAuraType(SPELL_AURA_SET_FFA_PVP))
     {
         if (!IsFFAPvP())
         {
@@ -1434,7 +1459,7 @@ void Player::UpdateFFAPvPState(bool reset /*= true*/)
     else if (IsFFAPvP())
     {
         if ((pvpInfo.IsInNoPvPArea || IsGameMaster()) || reset ||
-            !pvpInfo.EndTimer)
+            !pvpInfo.EndTimer || !HasAuraType(SPELL_AURA_SET_FFA_PVP))
         {
             pvpInfo.FFAPvPEndTimer = time_t(0);
             if (HasByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP))
@@ -1470,8 +1495,9 @@ void Player::UpdateFFAPvPState(bool reset /*= true*/)
             // Not FFA PvP realm
             // Not FFA PvP timer already set
             // Being recently in PvP combat
+            // Not FFA spell aura
             if (!pvpInfo.IsInFFAPvPArea && !sWorld->IsFFAPvPRealm() &&
-                !pvpInfo.FFAPvPEndTimer)
+                !pvpInfo.FFAPvPEndTimer && !HasAuraType(SPELL_AURA_SET_FFA_PVP))
             {
                 pvpInfo.FFAPvPEndTimer =
                     GameTime::GetGameTime().count() +

@@ -689,7 +689,7 @@ bool Unit::IsWithinMeleeRange(Unit const* obj, float dist) const
     float dz = GetPositionZ() - obj->GetPositionZ();
     float distsq = dx * dx + dy * dy + dz * dz;
 
-    float maxdist = dist + GetMeleeRange(obj);
+    float maxdist = dist + GetMeleeRange(obj) + GetTotalAuraModifier(SPELL_AURA_MOD_AUTOATTACK_RANGE);
 
     return distsq < maxdist * maxdist;
 }
@@ -1329,8 +1329,8 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage* damageInfo, int32 dama
         case SPELL_DAMAGE_CLASS_RANGED:
         case SPELL_DAMAGE_CLASS_MELEE:
             {
-                // Physical Damage
-                if (damageSchoolMask & SPELL_SCHOOL_MASK_NORMAL)
+                // Physical Damage or has aura SPELL_AURA_ALLOW_BLOCKING_SPELLS
+                if (damageSchoolMask & SPELL_SCHOOL_MASK_NORMAL || CanBlockSpells(victim))
                 {
                     // Get blocked status
                     blocked = isSpellBlocked(victim, spellInfo, attackType);
@@ -1400,11 +1400,31 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage* damageInfo, int32 dama
         case SPELL_DAMAGE_CLASS_NONE:
         case SPELL_DAMAGE_CLASS_MAGIC:
             {
+                // Aleist3r: can block spells as well if has SPELL_AURA_ALLOW_BLOCKING_SPELLS
+                if (CanBlockSpells(victim))
+                {
+                    // Get blocked status
+                    blocked = isSpellBlocked(victim, spellInfo, attackType);
+                }
+
                 // If crit add critical bonus
                 if (crit)
                 {
                     damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
                     damage = Unit::SpellCriticalDamageBonus(this, spellInfo, damage, victim);
+                }
+
+                if (blocked)
+                {
+                    damageInfo->blocked = victim->GetShieldBlockValue();
+                    // double blocked amount if block is critical
+                    if (victim->isBlockCritical())
+                        damageInfo->blocked *= 2;
+                    if (damage < int32(damageInfo->blocked))
+                        damageInfo->blocked = uint32(damage);
+
+                    damage -= damageInfo->blocked;
+                    cleanDamage += damageInfo->blocked;
                 }
 
                 int32 resilienceReduction = damage;
@@ -1987,8 +2007,9 @@ void Unit::HandleEmoteCommand(uint32 emoteId)
 bool Unit::IsDamageReducedByArmor(SpellSchoolMask schoolMask, SpellInfo const* spellInfo, uint8 effIndex)
 {
     // only physical spells damage gets reduced by armor
-    if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0)
+    if (!(schoolMask & SPELL_SCHOOL_MASK_NORMAL))
         return false;
+
     if (spellInfo)
     {
         // there are spells with no specific attribute but they have "ignores armor" in tooltip
@@ -2056,6 +2077,24 @@ uint32 Unit::CalcArmorReducedDamage(Unit const* attacker, Unit const* victim, co
                 }
             }
 
+            // Aleist3r: armor penetration rating is moved from combat ratings to spell auras
+            // while cannot add new CR without client modifications, GetRatingMultiplier accepts up to 32 values
+            float bonusFlat = 0;
+            AuraEffectList const& armorPenFlatAuras = attacker->GetAuraEffectsByType(SPELL_AURA_MOD_ARMOR_PENETRATION);
+            for (AuraEffectList::const_iterator itr = armorPenFlatAuras.begin(); itr != armorPenFlatAuras.end(); ++itr)
+            {
+                if ((*itr)->GetSpellInfo()->EquippedItemClass == -1)
+                {
+                    if (!spellInfo || (*itr)->IsAffectedOnSpell(spellInfo) || (*itr)->GetMiscValue() & spellInfo->GetSchoolMask())
+                        bonusFlat += (*itr)->GetAmount() / attacker->ToPlayer()->GetRatingMultiplier(CombatRating(25));
+                }
+                else
+                {
+                    if (attacker->ToPlayer()->HasItemFitToSpellRequirements((*itr)->GetSpellInfo()))
+                        bonusFlat += (*itr)->GetAmount() / attacker->ToPlayer()->GetRatingMultiplier(CombatRating(25));
+                }
+            }
+
             float maxArmorPen = 0;
             if (victim->GetLevel() < 60)
                 maxArmorPen = float(400 + 85 * victim->GetLevel());
@@ -2065,7 +2104,7 @@ uint32 Unit::CalcArmorReducedDamage(Unit const* attacker, Unit const* victim, co
             // Cap armor penetration to this number
             maxArmorPen = std::min((armor + maxArmorPen) / 3, armor);
             // Figure out how much armor do we ignore
-            float armorPen = CalculatePct(maxArmorPen, bonusPct + attacker->ToPlayer()->GetRatingBonusValue(CR_ARMOR_PENETRATION));
+            float armorPen = CalculatePct(maxArmorPen, bonusPct + bonusFlat);
             // Got the value, apply it
             armor -= std::min(armorPen, maxArmorPen);
         }
@@ -2997,6 +3036,14 @@ uint32 Unit::CalculateDamage(WeaponAttackType attType, bool normalized, bool add
         }
     }
 
+    AuraEffectList const& mDamageDoneVersusCaster = GetAuraEffectsByType(SPELL_AURA_MOD_SCHOOL_MASK_DAMAGE_VS_CASTER);
+    for (AuraEffectList::const_iterator i = mDamageDoneVersusCaster.begin(); i != mDamageDoneVersusCaster.end(); ++i)
+        if ((*i)->GetCasterGUID() == GetVictim()->GetGUID() && ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL))
+        {
+            AddPct(minDamage, (*i)->GetAmount());
+            AddPct(maxDamage, (*i)->GetAmount());
+        }
+
     minDamage = std::max(0.f, minDamage);
     maxDamage = std::max(0.f, maxDamage);
 
@@ -3084,6 +3131,11 @@ bool Unit::isSpellBlocked(Unit* victim, SpellInfo const* spellProto, WeaponAttac
             return true;
     }
     return false;
+}
+
+bool Unit::CanBlockSpells(Unit* victim)
+{
+    return !victim->GetAuraEffectsByType(SPELL_AURA_ALLOW_BLOCKING_SPELLS).empty();
 }
 
 bool Unit::isBlockCritical()
@@ -11617,6 +11669,11 @@ float Unit::SpellPctDamageModsDone(Unit* victim, SpellInfo const* spellProto, Da
             break;
     }
 
+    AuraEffectList const& mDamageDoneVersusCaster = GetAuraEffectsByType(SPELL_AURA_MOD_SCHOOL_MASK_DAMAGE_VS_CASTER);
+    for (AuraEffectList::const_iterator i = mDamageDoneVersusCaster.begin(); i != mDamageDoneVersusCaster.end(); ++i)
+        if ((*i)->GetCasterGUID() == victim->GetGUID() && ((*i)->GetMiscValue() & spellProto->GetSchoolMask()))
+            AddPct(DoneTotalMod, (*i)->GetAmount());
+
     return DoneTotalMod;
 }
 
@@ -11822,6 +11879,12 @@ uint32 Unit::SpellDamageBonusTaken(Unit* caster, SpellInfo const* spellProto, ui
             if ((*i)->GetCasterGUID() == caster->GetGUID() && (*i)->IsAffectedOnSpell(spellProto))
                 if (spellProto->ValidateAttribute6SpellDamageMods(caster, *i, damagetype == DOT))
                     AddPct(TakenTotalMod, (*i)->GetAmount());
+
+        AuraEffectList const& mOwnerTakenSchool = GetAuraEffectsByType(SPELL_AURA_MOD_SCHOOL_MASK_DAMAGE_FROM_CASTER);
+        for (AuraEffectList::const_iterator i = mOwnerTakenSchool.begin(); i != mOwnerTakenSchool.end(); ++i)
+            if ((*i)->GetCasterGUID() == caster->GetGUID() && ((*i)->GetMiscValue() & spellProto->GetSchoolMask()))
+                if (spellProto->ValidateAttribute6SpellDamageMods(caster, *i, damagetype == DOT))
+                    AddPct(TakenTotalMod, (*i)->GetAmount());
     }
 
     if (uint32 mechanicMask = spellProto->GetAllEffectsMechanicMask())
@@ -11945,6 +12008,7 @@ float Unit::processDummyAuras(float TakenTotalMod) const
 int32 Unit::SpellBaseDamageBonusDone(SpellSchoolMask schoolMask)
 {
     int32 DoneAdvertisedBenefit = 0;
+    int32 AdvertisedBenefitPct = 0;
 
     AuraEffectList const& mDamageDone = GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_DONE);
     for (AuraEffectList::const_iterator i = mDamageDone.begin(); i != mDamageDone.end(); ++i)
@@ -11953,6 +12017,11 @@ int32 Unit::SpellBaseDamageBonusDone(SpellSchoolMask schoolMask)
                 // -1 == any item class (not wand then)
                 (*i)->GetSpellInfo()->EquippedItemInventoryTypeMask == 0)
             // 0 == any inventory type (not wand then)
+            DoneAdvertisedBenefit += (*i)->GetAmount();
+
+    AuraEffectList const& mSpellPower = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER);
+    for (AuraEffectList::const_iterator i = mSpellPower.begin(); i != mSpellPower.end(); ++i)
+        if ((*i)->GetMiscValue() & schoolMask)
             DoneAdvertisedBenefit += (*i)->GetAmount();
 
     if (GetTypeId() == TYPEID_PLAYER)
@@ -11971,12 +12040,39 @@ int32 Unit::SpellBaseDamageBonusDone(SpellSchoolMask schoolMask)
                 DoneAdvertisedBenefit += int32(CalculatePct(GetStat(usedStat), (*i)->GetAmount()));
             }
         }
+        AuraEffectList const& mSpellPowerOfStatPercent = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_FROM_STAT_PERCENT);
+        for (AuraEffectList::const_iterator i = mSpellPowerOfStatPercent.begin(); i != mSpellPowerOfStatPercent.end(); ++i)
+        {
+            if ((*i)->GetMiscValue() & schoolMask)
+            {
+                // stat used stored in miscValueB for this aura
+                Stats usedStat = Stats((*i)->GetMiscValueB());
+                DoneAdvertisedBenefit += int32(CalculatePct(GetStat(usedStat), (*i)->GetAmount()));
+            }
+        }
+        // ... and combat rating
+        AuraEffectList const& mSpellPowerByCombatRating = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_FROM_RATING_PERCENT);
+        for (AuraEffectList::const_iterator i = mSpellPowerByCombatRating.begin(); i != mSpellPowerByCombatRating.end(); ++i)
+        {
+            if ((*i)->GetMiscValue() & schoolMask)
+            {
+                // combat rating used stored in miscValueB for this aura; not a bitmask 
+                CombatRating usedRating = CombatRating((*i)->GetMiscValueB());
+                DoneAdvertisedBenefit += int32(CalculatePct(ToPlayer()->GetRatingBonusValue(usedRating), (*i)->GetAmount()));
+            }
+        }
         // ... and attack power
         AuraEffectList const& mDamageDonebyAP = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_DAMAGE_OF_ATTACK_POWER);
         for (AuraEffectList::const_iterator i = mDamageDonebyAP.begin(); i != mDamageDonebyAP.end(); ++i)
             if ((*i)->GetMiscValue() & schoolMask)
                 DoneAdvertisedBenefit += int32(CalculatePct(GetTotalAttackPowerValue(BASE_ATTACK), (*i)->GetAmount()));
     }
+    // Spell Power Pct should be added after everything
+    AuraEffectList const& mSpellPowerPct = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_PCT);
+    for (AuraEffectList::const_iterator i = mSpellPowerPct.begin(); i != mSpellPowerPct.end(); ++i)
+        if ((*i)->GetMiscValue() & schoolMask)
+            DoneAdvertisedBenefit += int32(CalculatePct(DoneAdvertisedBenefit, (*i)->GetAmount()));
+
     return DoneAdvertisedBenefit;
 }
 
@@ -12454,6 +12550,11 @@ float Unit::SpellPctHealingModsDone(Unit* victim, SpellInfo const* spellProto, D
             break;
     }
 
+    AuraEffectList const& mHealingDoneVsCaster = owner->GetAuraEffectsByType(SPELL_AURA_MOD_SCHOOL_MASK_HEALING_VS_CASTER);
+    for (AuraEffectList::const_iterator i = mHealingDoneVsCaster.begin(); i != mHealingDoneVsCaster.end(); ++i)
+        if ((*i)->GetCasterGUID() == owner->GetGUID() && ((*i)->GetMiscValue() & spellProto->GetSchoolMask()))
+            AddPct(DoneTotalMod, (*i)->GetAmount());
+
     return DoneTotalMod;
 }
 
@@ -12679,6 +12780,11 @@ uint32 Unit::SpellHealingBonusTaken(Unit* caster, SpellInfo const* spellProto, u
         for (AuraEffectList::const_iterator i = mHealingGet.begin(); i != mHealingGet.end(); ++i)
             if (caster->GetGUID() == (*i)->GetCasterGUID() && (*i)->IsAffectedOnSpell(spellProto))
                 AddPct(TakenTotalMod, (*i)->GetAmount());
+
+        AuraEffectList const& mHealingSchoolMaskReceived = GetAuraEffectsByType(SPELL_AURA_MOD_SCHOOL_MASK_HEALING_FROM_CASTER);
+        for (AuraEffectList::const_iterator i = mHealingSchoolMaskReceived.begin(); i != mHealingSchoolMaskReceived.end(); ++i)
+            if (caster->GetGUID() == (*i)->GetCasterGUID() && ((*i)->GetMiscValue() & spellProto->GetSchoolMask()))
+                AddPct(TakenTotalMod, (*i)->GetAmount());
     }
 
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
@@ -12716,6 +12822,11 @@ int32 Unit::SpellBaseHealingBonusDone(SpellSchoolMask schoolMask)
         if (!(*i)->GetMiscValue() || ((*i)->GetMiscValue() & schoolMask) != 0)
             AdvertisedBenefit += (*i)->GetAmount();
 
+    AuraEffectList const& mSpellPower = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER);
+    for (AuraEffectList::const_iterator i = mSpellPower.begin(); i != mSpellPower.end(); ++i)
+        if (!(*i)->GetMiscValue() || ((*i)->GetMiscValue() & schoolMask) != 0)
+            AdvertisedBenefit += (*i)->GetAmount();
+
     // Healing bonus of spirit, intellect and strength
     if (GetTypeId() == TYPEID_PLAYER)
     {
@@ -12731,12 +12842,36 @@ int32 Unit::SpellBaseHealingBonusDone(SpellSchoolMask schoolMask)
             AdvertisedBenefit += int32(CalculatePct(GetStat(usedStat), (*i)->GetAmount()));
         }
 
+        AuraEffectList const& mSpellPowerOfStatPercent = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_FROM_STAT_PERCENT);
+        for (AuraEffectList::const_iterator i = mSpellPowerOfStatPercent.begin(); i != mSpellPowerOfStatPercent.end(); ++i)
+        {
+            // stat used dependent from misc value (stat index)
+            Stats usedStat = Stats((*i)->GetSpellInfo()->Effects[(*i)->GetEffIndex()].MiscValueB);
+            AdvertisedBenefit += int32(CalculatePct(GetStat(usedStat), (*i)->GetAmount()));
+        }
+
+        // ... and combat rating
+        AuraEffectList const& mSpellPowerOfCombatRating = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_FROM_RATING_PERCENT);
+        for (AuraEffectList::const_iterator i = mSpellPowerOfCombatRating.begin(); i != mSpellPowerOfCombatRating.end(); ++i)
+        {
+            // combat rating used stored in miscValueB for this aura; not a bitmask 
+            CombatRating usedRating = CombatRating((*i)->GetSpellInfo()->Effects[(*i)->GetEffIndex()].MiscValueB);
+            AdvertisedBenefit += int32(CalculatePct(ToPlayer()->GetRatingBonusValue(usedRating), (*i)->GetAmount()));
+        }
+
         // ... and attack power
         AuraEffectList const& mHealingDonebyAP = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_HEALING_OF_ATTACK_POWER);
         for (AuraEffectList::const_iterator i = mHealingDonebyAP.begin(); i != mHealingDonebyAP.end(); ++i)
             if ((*i)->GetMiscValue() & schoolMask)
                 AdvertisedBenefit += int32(CalculatePct(GetTotalAttackPowerValue(BASE_ATTACK), (*i)->GetAmount()));
     }
+
+    // Spell Power Pct should be added after everything
+    AuraEffectList const& mSpellPowerPct = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_PCT);
+    for (AuraEffectList::const_iterator i = mSpellPowerPct.begin(); i != mSpellPowerPct.end(); ++i)
+        if ((*i)->GetMiscValue() & schoolMask)
+            AdvertisedBenefit += int32(CalculatePct(AdvertisedBenefit, (*i)->GetAmount()));
+
     return AdvertisedBenefit;
 }
 
@@ -13148,6 +13283,16 @@ uint32 Unit::MeleeDamageBonusDone(Unit* victim, uint32 pdamage, WeaponAttackType
     // Done total percent damage auras
     float DoneTotalMod = 1.0f;
 
+    if (!spellProto)
+    {
+        // melee attack
+        for (AuraEffect const* autoAttackDamage : GetAuraEffectsByType(SPELL_AURA_MOD_AUTOATTACK_DAMAGE))
+            DoneFlatBenefit += autoAttackDamage->GetAmount();
+
+        for (AuraEffect const* autoAttackDamagePct : GetAuraEffectsByType(SPELL_AURA_MOD_AUTOATTACK_DAMAGE_PCT))
+            AddPct(DoneTotalMod, autoAttackDamagePct->GetAmount());
+    }
+
     // mods for SPELL_SCHOOL_MASK_NORMAL are already factored in base melee damage calculation
     if (!(damageSchoolMask & SPELL_SCHOOL_MASK_NORMAL))
     {
@@ -13313,6 +13458,11 @@ uint32 Unit::MeleeDamageBonusTaken(Unit* attacker, uint32 pdamage, WeaponAttackT
             if ((*i)->GetCasterGUID() == attacker->GetGUID() && (*i)->IsAffectedOnSpell(spellProto))
                 AddPct(TakenTotalMod, (*i)->GetAmount());
 
+        AuraEffectList const& mOwnerTakenSchool = GetAuraEffectsByType(SPELL_AURA_MOD_SCHOOL_MASK_DAMAGE_FROM_CASTER);
+        for (AuraEffectList::const_iterator i = mOwnerTakenSchool.begin(); i != mOwnerTakenSchool.end(); ++i)
+            if ((*i)->GetCasterGUID() == attacker->GetGUID() && ((*i)->GetMiscValue() & spellProto->GetSchoolMask()))
+                AddPct(TakenTotalMod, (*i)->GetAmount());
+
         // Mod damage from spell mechanic
         uint32 mechanicMask = spellProto->GetAllEffectsMechanicMask();
 
@@ -13345,12 +13495,22 @@ uint32 Unit::MeleeDamageBonusTaken(Unit* attacker, uint32 pdamage, WeaponAttackT
         AuraEffectList const& mModMeleeDamageTakenPercent = GetAuraEffectsByType(SPELL_AURA_MOD_MELEE_DAMAGE_TAKEN_PCT);
         for (AuraEffectList::const_iterator i = mModMeleeDamageTakenPercent.begin(); i != mModMeleeDamageTakenPercent.end(); ++i)
             AddPct(TakenTotalMod, (*i)->GetAmount());
+
+        AuraEffectList const& mOwnerTakenSchool = GetAuraEffectsByType(SPELL_AURA_MOD_SCHOOL_MASK_DAMAGE_FROM_CASTER);
+        for (AuraEffectList::const_iterator i = mOwnerTakenSchool.begin(); i != mOwnerTakenSchool.end(); ++i)
+            if ((*i)->GetCasterGUID() == attacker->GetGUID() && ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL))
+                AddPct(TakenTotalMod, (*i)->GetAmount());
     }
     else
     {
         AuraEffectList const& mModRangedDamageTakenPercent = GetAuraEffectsByType(SPELL_AURA_MOD_RANGED_DAMAGE_TAKEN_PCT);
         for (AuraEffectList::const_iterator i = mModRangedDamageTakenPercent.begin(); i != mModRangedDamageTakenPercent.end(); ++i)
             AddPct(TakenTotalMod, (*i)->GetAmount());
+
+        AuraEffectList const& mOwnerTakenSchool = GetAuraEffectsByType(SPELL_AURA_MOD_SCHOOL_MASK_DAMAGE_FROM_CASTER);
+        for (AuraEffectList::const_iterator i = mOwnerTakenSchool.begin(); i != mOwnerTakenSchool.end(); ++i)
+            if ((*i)->GetCasterGUID() == attacker->GetGUID() && ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL))
+                AddPct(TakenTotalMod, (*i)->GetAmount());
     }
 
     // No positive taken bonus, custom attr
@@ -13692,6 +13852,8 @@ void Unit::CombatStart(Unit* victim, bool initialAggro)
                 victim->SetInCombatWith(owner);
             }
         }
+
+        ToggleCombatAuras(true);
     }
 
     Unit* who = victim->GetCharmerOrOwnerOrSelf();
@@ -13719,6 +13881,8 @@ void Unit::CombatStartOnCast(Unit* target, bool initialAggro, uint32 duration)
         // Xinef: If pet started combat - put owner in combat
         if (Unit* owner = GetOwner())
             owner->SetInCombatWith(target, duration);
+
+        ToggleCombatAuras(true);
     }
 
     Unit* who = target->GetCharmerOrOwnerOrSelf();
@@ -13806,6 +13970,8 @@ void Unit::SetInCombatState(bool PvP, Unit* enemy, uint32 duration)
     {
         sScriptMgr->OnPlayerEnterCombat(player, enemy);
     }
+
+    ToggleCombatAuras(false);
 }
 
 void Unit::ClearInCombat()
@@ -13841,6 +14007,8 @@ void Unit::ClearInCombat()
     {
         sScriptMgr->OnPlayerLeaveCombat(player);
     }
+
+    ToggleCombatAuras(false);
 }
 
 void Unit::ClearInPetCombat()
@@ -13851,6 +14019,8 @@ void Unit::ClearInPetCombat()
     {
         owner->RemoveUnitFlag(UNIT_FLAG_PET_IN_COMBAT);
     }
+
+    ToggleCombatAuras(false);
 }
 
 bool Unit::isTargetableForAttack(bool checkFakeDeath, Unit const* byWho) const
@@ -14092,6 +14262,8 @@ bool Unit::_IsValidAssistTarget(Unit const* target, SpellInfo const* bySpell) co
 
 int32 Unit::ModifyHealth(int32 dVal)
 {
+    ToggleOnHealthPctAuras();
+
     int32 gain = 0;
 
     if (dVal == 0)
@@ -14150,6 +14322,8 @@ int32 Unit::GetHealthGain(int32 dVal)
 // returns negative amount on power reduction
 int32 Unit::ModifyPower(Powers power, int32 dVal, bool withPowerUpdate /*= true*/)
 {
+    ToggleOnPowerPctAuras();
+
     if (dVal == 0)
         return 0;
 
@@ -15477,6 +15651,8 @@ void Unit::SetLevel(uint8 lvl, bool showLevelChange)
 
 void Unit::SetHealth(uint32 val)
 {
+    ToggleOnHealthPctAuras();
+
     if (getDeathState() == DeathState::JustDied)
         val = 0;
     else if (GetTypeId() == TYPEID_PLAYER && getDeathState() == DeathState::Dead)
@@ -15565,6 +15741,8 @@ void Unit::SetMaxHealth(uint32 val)
 
 void Unit::SetPower(Powers power, uint32 val, bool withPowerUpdate /*= true*/, bool fromRegenerate /* = false */)
 {
+    ToggleOnPowerPctAuras();
+
     if (!fromRegenerate && GetPower(power) == val)
     {
         return;
@@ -21669,4 +21847,62 @@ std::string Unit::GetDebugInfo() const
         << " UnitMovementFlags: " << GetUnitMovementFlags() << " ExtraUnitMovementFlags: " << GetExtraUnitMovementFlags()
         << " Class: " << std::to_string(getClass());
     return sstr.str();
+}
+
+void Unit::ToggleCombatAuras(bool startingCombat)
+{
+    auto auras = GetAuraEffectsByType(SPELL_AURA_TOGGLE_AURA_COMBAT_STATE);
+    for (auto aura : auras)
+    {
+        if (startingCombat && aura->GetMiscValueB() == 1)
+            AddAura(aura->GetTriggerSpell(), this);
+        else if (!startingCombat && aura->GetMiscValueB() == 0)
+            AddAura(aura->GetTriggerSpell(), this);
+        else
+            RemoveAura(aura->GetTriggerSpell());
+    }
+}
+
+void Unit::ToggleOnHealthPctAuras()
+{
+    auto auras = GetAuraEffectsByType(SPELL_AURA_TRIGGER_SPELL_ON_HEALTH_PCT);
+
+    for (auto aura : auras)
+    {
+        int8 power = aura->GetMiscValue();
+        int32 amount = aura->GetAmount();
+
+        if ((aura->GetMiscValueB() == 0 && (float)GetHealthPct() < amount)
+            || (aura->GetMiscValueB() == 1 && (float)GetHealthPct() <= amount)
+            || (aura->GetMiscValueB() == 2 && (float)GetHealthPct() > amount)
+            || (aura->GetMiscValueB() == 3 && (float)GetHealthPct() >= amount))
+        {
+            if (!HasAura(aura->GetTriggerSpell()))
+                AddAura(aura->GetTriggerSpell(), this);
+        }
+        else
+            RemoveAura(aura->GetTriggerSpell());
+    }
+}
+
+void Unit::ToggleOnPowerPctAuras()
+{
+    auto auras = GetAuraEffectsByType(SPELL_AURA_TRIGGER_SPELL_ON_POWER_PCT);
+
+    for (auto aura : auras)
+    {
+        int8 power = aura->GetMiscValue();
+        int32 amount = aura->GetAmount();
+
+        if ((aura->GetMiscValueB() == 0 && (float)GetPowerPct(Powers(power)) < amount)
+            || (aura->GetMiscValueB() == 1 && (float)GetPowerPct(Powers(power)) <= amount)
+            || (aura->GetMiscValueB() == 2 && (float)GetPowerPct(Powers(power)) > amount)
+            || (aura->GetMiscValueB() == 3 && (float)GetPowerPct(Powers(power)) >= amount))
+        {
+            if (!HasAura(aura->GetTriggerSpell()))
+                AddAura(aura->GetTriggerSpell(), this);
+        }
+        else
+            RemoveAura(aura->GetTriggerSpell());
+    }
 }
