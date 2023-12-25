@@ -8043,6 +8043,9 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                                 case POWER_RAGE:
                                     triggered_spell_id = 71883;
                                     break;
+                                case POWER_FOCUS:
+                                    triggered_spell_id = 121027;
+                                    break;
                                 case POWER_ENERGY:
                                     triggered_spell_id = 71882;
                                     break;
@@ -8064,6 +8067,9 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                                     break;
                                 case POWER_RAGE:
                                     triggered_spell_id = 71886;
+                                    break;
+                                case POWER_FOCUS:
+                                    triggered_spell_id = 121028;
                                     break;
                                 case POWER_ENERGY:
                                     triggered_spell_id = 71887;
@@ -9281,7 +9287,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                                         trigger_spell_id = 60515;
                                         break;
                                     case CLASS_MONK:
-                                        //trigger_spell_id = ;      // TODO
+                                        trigger_spell_id = 101034;
                                         break;
                                 }
 
@@ -9981,8 +9987,14 @@ bool Unit::HandleOverrideClassScriptAuraProc(Unit* victim, uint32 /*damage*/, Au
                     case POWER_RAGE:
                         triggered_spell_id = 28723;
                         break;
+                    case POWER_FOCUS:
+                        triggered_spell_id = 101030;
+                        break;
                     case POWER_ENERGY:
                         triggered_spell_id = 28724;
+                        break;
+                    case POWER_RUNIC_POWER:
+                        triggered_spell_id = 101029;
                         break;
                     default:
                         return false;
@@ -10008,6 +10020,9 @@ bool Unit::HandleOverrideClassScriptAuraProc(Unit* victim, uint32 /*damage*/, Au
                         break;
                     case POWER_RAGE:
                         triggered_spell_id = 48541;
+                        break;
+                    case POWER_FOCUS:
+                        triggered_spell_id = 101031;
                         break;
                     case POWER_ENERGY:
                         triggered_spell_id = 48540;

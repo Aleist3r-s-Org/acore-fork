@@ -58,6 +58,7 @@ public:
             { "rage",           HandleModifyRageCommand,          SEC_GAMEMASTER,       Console::No },
             { "runicpower",     HandleModifyRunicPowerCommand,    SEC_GAMEMASTER,       Console::No },
             { "energy",         HandleModifyEnergyCommand,        SEC_GAMEMASTER,       Console::No },
+            { "focus",          HandleModifyFocusCommand,         SEC_GAMEMASTER,       Console::No },
             { "money",          HandleModifyMoneyCommand,         SEC_GAMEMASTER,       Console::No },
             { "scale",          HandleModifyScaleCommand,         SEC_GAMEMASTER,       Console::No },
             { "bit",            HandleModifyBitCommand,           SEC_GAMEMASTER,       Console::No },
@@ -195,6 +196,33 @@ public:
         target->SetPower(POWER_ENERGY, energyPoints);
 
         LOG_DEBUG("misc", handler->GetAcoreString(LANG_CURRENT_ENERGY), target->GetMaxPower(POWER_ENERGY));
+
+        return true;
+    }
+
+    //Edit Player Focus
+    static bool HandleModifyFocusCommand(ChatHandler* handler, int32 focusPoints)
+    {
+        Player* target = handler->getSelectedPlayer();
+
+        if (!CheckModifyInt32(handler, target, focusPoints))
+        {
+            return false;
+        }
+
+        focusPoints *= 10;
+
+        handler->PSendSysMessage(LANG_YOU_CHANGE_FOCUS, handler->GetNameLink(target).c_str(), focusPoints / 10, focusPoints / 10);
+
+        if (handler->needReportToTarget(target))
+        {
+            ChatHandler(target->GetSession()).PSendSysMessage(LANG_YOURS_FOCUS_CHANGED, handler->GetNameLink().c_str(), focusPoints / 10, focusPoints / 10);
+        }
+
+        target->SetMaxPower(POWER_FOCUS, focusPoints);
+        target->SetPower(POWER_FOCUS, focusPoints);
+
+        LOG_DEBUG("misc", handler->GetAcoreString(LANG_CURRENT_FOCUS), target->GetMaxPower(POWER_FOCUS));
 
         return true;
     }

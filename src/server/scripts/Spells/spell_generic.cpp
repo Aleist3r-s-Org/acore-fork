@@ -5135,6 +5135,61 @@ class spell_gen_choking_vines : public AuraScript
     }
 };
 
+// 101023 - Two Forms
+enum TwoForms
+{
+    SPELL_TWO_FORMS_RACIAL  = 101023,
+    SPELL_TWO_FORMS_AURA    = 101024,
+    SPELL_TWO_FORMS_VISUAL  = 101025
+};
+
+class spell_worgen_racial_two_forms_spell : public SpellScript
+{
+    PrepareSpellScript(spell_worgen_racial_two_forms_spell);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_TWO_FORMS_RACIAL, SPELL_TWO_FORMS_AURA, SPELL_TWO_FORMS_VISUAL });
+    }
+
+    void HandleOnHit()
+    {
+        Unit* caster = GetCaster();
+
+        if (caster->HasAura(SPELL_TWO_FORMS_AURA))
+            caster->RemoveAura(SPELL_TWO_FORMS_AURA);
+        else
+            caster->AddAura(SPELL_TWO_FORMS_AURA, caster);
+
+        caster->CastSpell(caster, SPELL_TWO_FORMS_VISUAL, true);
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_worgen_racial_two_forms_spell::HandleOnHit);
+    }
+};
+
+class spell_worgen_racial_two_forms_aura : public AuraScript
+{
+    PrepareAuraScript(spell_worgen_racial_two_forms_aura);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_TWO_FORMS_AURA, SPELL_TWO_FORMS_VISUAL });
+    }
+
+    void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+    {
+        GetCaster()->CastSpell(GetCaster(), SPELL_TWO_FORMS_VISUAL, true);
+    }
+
+    void Register() override
+    {
+        OnEffectRemove += AuraEffectRemoveFn(spell_worgen_racial_two_forms_aura::OnRemove, EFFECT_0, SPELL_AURA_TRANSFORM, AURA_EFFECT_HANDLE_REAL);
+    }
+};
+
 void AddSC_generic_spell_scripts()
 {
     RegisterSpellScript(spell_silithyst);

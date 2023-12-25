@@ -936,6 +936,7 @@ enum oracleAblutions
     SPELL_ABLUTION_MANA             = 59813,
     SPELL_ABLUTION_RAGE             = 59814,
     SPELL_ABLUTION_ENERGY           = 59815,
+    SPELL_ABLUTION_FOCUS            = 101033
 };
 
 class spell_item_oracle_ablutions : public SpellScript
@@ -962,6 +963,9 @@ class spell_item_oracle_ablutions : public SpellScript
                 break;
             case POWER_ENERGY:
                 caster->CastSpell(caster, SPELL_ABLUTION_ENERGY, true);
+                break;
+            case POWER_FOCUS:
+                caster->CastSpell(caster, SPELL_ABLUTION_FOCUS, true);
                 break;
             default:
                 break;
@@ -1209,7 +1213,8 @@ enum EyeOfGruul
     SPELL_DRUID_ITEM_HEALING_TRANCE   = 37721,
     SPELL_PALADIN_ITEM_HEALING_TRANCE = 37723,
     SPELL_PRIEST_ITEM_HEALING_TRANCE  = 37706,
-    SPELL_SHAMAN_ITEM_HEALING_TRANCE  = 37722
+    SPELL_SHAMAN_ITEM_HEALING_TRANCE  = 37722,
+    SPELL_MONK_ITEM_HEALING_TRANCE   = 101035
 };
 
 // 37705 - Healing Discount
@@ -1224,7 +1229,8 @@ class spell_item_eye_of_gruul_healing_discount : public AuraScript
                 SPELL_DRUID_ITEM_HEALING_TRANCE,
                 SPELL_PALADIN_ITEM_HEALING_TRANCE,
                 SPELL_PRIEST_ITEM_HEALING_TRANCE,
-                SPELL_SHAMAN_ITEM_HEALING_TRANCE
+                SPELL_SHAMAN_ITEM_HEALING_TRANCE,
+                SPELL_MONK_ITEM_HEALING_TRANCE
             });
     }
 
@@ -1239,8 +1245,8 @@ class spell_item_eye_of_gruul_healing_discount : public AuraScript
                 case CLASS_DRUID:
                     spell_id = SPELL_DRUID_ITEM_HEALING_TRANCE;
                     break;
-                case CLASS_MONK:    // TODO
-                    //spell_id = ;
+                case CLASS_MONK:
+                    spell_id = SPELL_MONK_ITEM_HEALING_TRANCE;
                     break;
                 case CLASS_PALADIN:
                     spell_id = SPELL_PALADIN_ITEM_HEALING_TRANCE;

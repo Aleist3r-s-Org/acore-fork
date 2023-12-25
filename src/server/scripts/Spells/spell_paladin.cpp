@@ -42,6 +42,7 @@ enum PaladinSpells
     SPELL_PALADIN_BLESSING_OF_LOWER_CITY_PALADIN = 37879,
     SPELL_PALADIN_BLESSING_OF_LOWER_CITY_PRIEST  = 37880,
     SPELL_PALADIN_BLESSING_OF_LOWER_CITY_SHAMAN  = 37881,
+    SPELL_PALADIN_BLESSING_OF_LOWER_CITY_MONK    = 101036,
 
     SPELL_PALADIN_DIVINE_STORM                   = 53385,
     SPELL_PALADIN_DIVINE_STORM_DUMMY             = 54171,
@@ -416,7 +417,8 @@ class spell_pal_blessing_of_faith : public SpellScript
                 SPELL_PALADIN_BLESSING_OF_LOWER_CITY_DRUID,
                 SPELL_PALADIN_BLESSING_OF_LOWER_CITY_PALADIN,
                 SPELL_PALADIN_BLESSING_OF_LOWER_CITY_PRIEST,
-                SPELL_PALADIN_BLESSING_OF_LOWER_CITY_SHAMAN
+                SPELL_PALADIN_BLESSING_OF_LOWER_CITY_SHAMAN,
+                SPELL_PALADIN_BLESSING_OF_LOWER_CITY_MONK
             });
     }
 
@@ -430,8 +432,8 @@ class spell_pal_blessing_of_faith : public SpellScript
                 case CLASS_DRUID:
                     spell_id = SPELL_PALADIN_BLESSING_OF_LOWER_CITY_DRUID;
                     break;
-                case CLASS_MONK:    // TODO
-                    //spell_id = ;
+                case CLASS_MONK:
+                    spell_id = SPELL_PALADIN_BLESSING_OF_LOWER_CITY_MONK;
                     break;
                 case CLASS_PALADIN:
                     spell_id = SPELL_PALADIN_BLESSING_OF_LOWER_CITY_PALADIN;

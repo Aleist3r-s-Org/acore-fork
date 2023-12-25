@@ -2236,48 +2236,90 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
 
                             switch (target->getRace())
                             {
-                                // Blood Elf
                                 case RACE_BLOODELF:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 17829 : 17830);
-                                    break;
-                                // Orc
+                                case RACE_GOBLIN:
                                 case RACE_ORC:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 10139 : 10140);
-                                    break;
-                                // Troll
+                                case RACE_PANDAREN_HORDE:
                                 case RACE_TROLL:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 10135 : 10134);
-                                    break;
-                                // Tauren
                                 case RACE_TAUREN:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 10136 : 10147);
-                                    break;
-                                // Undead
                                 case RACE_UNDEAD_PLAYER:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 10146 : 10145);
-                                    break;
-                                // Draenei
+                                {
+                                    switch (irand(0, 6))
+                                    {
+                                        // Draenei
+                                        case 0:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 16125 : 16126);
+                                            break;
+                                        // Dwarf
+                                        case 1:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 53 : 54);
+                                            break;
+                                        // Gnome
+                                        case 2:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 1563 : 1564);
+                                            break;
+                                        // Human
+                                        case 3:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 49 : 50);
+                                            break;
+                                        // Night Elf
+                                        case 4:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 55 : 56);
+                                            break;
+                                        // Pandaren
+                                        case 5:
+                                            // TODO: update when display ids are ported to dbc
+                                            break;
+                                        // Worgen
+                                        case 6:
+                                            // TODO: update when display ids are ported to dbc
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
                                 case RACE_DRAENEI:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 17827 : 17828);
-                                    break;
-                                // Dwarf
                                 case RACE_DWARF:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 10141 : 10142);
-                                    break;
-                                // Gnome
                                 case RACE_GNOME:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 10148 : 10149);
-                                    break;
-                                // Human
                                 case RACE_HUMAN:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 10137 : 10138);
-                                    break;
-                                // Night Elf
                                 case RACE_NIGHTELF:
-                                    target->SetDisplayId(target->getGender() == GENDER_MALE ? 10143 : 10144);
-                                    break;
-                                default:
-                                    break;
+                                case RACE_PANDAREN_ALLIANCE:
+                                case RACE_WORGEN:
+                                {
+                                    switch (irand(0, 6))
+                                    {
+                                        // Blood Elf
+                                        case 0:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 15476 : 15475);
+                                            break;
+                                        // Goblin
+                                        case 1:
+                                            // TODO: update when display ids are ported to dbc
+                                            break;
+                                        // Orc
+                                        case 2:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 51 : 52);
+                                            break;
+                                        // Pandaren
+                                        case 3:
+                                            // TODO: update when display ids are ported to dbc
+                                            break;
+                                        // Troll
+                                        case 4:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 1478 : 1479);
+                                            break;
+                                        // Tauren
+                                        case 5:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 59 : 60);
+                                            break;
+                                        // Undead
+                                        case 6:
+                                            target->SetDisplayId(target->getGender() == GENDER_MALE ? 57 : 58);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
                             }
                             break;
                         }
@@ -2742,6 +2784,10 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                     // Gnomeregan Pride
                     case 75531:
                         target->SetDisplayId(target->getGender() == GENDER_MALE ? 31654 : 31655);
+                        break;
+                    // Two Forms
+                    case 101024:
+                        target->SetDisplayId(target->getGender() == GENDER_MALE ? 49 : 50); // TODO: update with gilnean display ids
                         break;
                     default:
                         break;

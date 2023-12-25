@@ -1615,6 +1615,8 @@ void Player::ProcessDelayedOperations()
 
         SetPower(POWER_RAGE, 0);
         SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
+        SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
+        SetPower(POWER_RUNIC_POWER, 0);
 
         SpawnCorpseBones();
     }
@@ -2031,6 +2033,9 @@ void Player::ResetAllPowers()
             break;
         case POWER_RAGE:
             SetPower(POWER_RAGE, 0);
+            break;
+        case POWER_FOCUS:
+            SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
             break;
         case POWER_ENERGY:
             SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
@@ -2499,6 +2504,8 @@ void Player::GiveLevel(uint8 level)
         SetPower(POWER_RAGE, GetMaxPower(POWER_RAGE));
     SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
     SetPower(POWER_HAPPINESS, 0);
+    if (GetPower(POWER_RUNIC_POWER) > GetMaxPower(POWER_RUNIC_POWER))
+        SetPower(POWER_RUNIC_POWER, GetMaxPower(POWER_RUNIC_POWER));
 
     // update level to hunter/summon pet
     if (Pet* pet = GetPet())
@@ -2707,7 +2714,8 @@ void Player::InitStatsForLevel(bool reapplyMods)
         SetPower(POWER_RAGE, GetMaxPower(POWER_RAGE));
     SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
     SetPower(POWER_HAPPINESS, 0);
-    SetPower(POWER_RUNIC_POWER, 0);
+    if (GetPower(POWER_RUNIC_POWER) > GetMaxPower(POWER_RUNIC_POWER))
+        SetPower(POWER_RUNIC_POWER, GetMaxPower(POWER_RUNIC_POWER));
 
     // update level to hunter/summon pet
     if (Pet* pet = GetPet())
@@ -4417,7 +4425,9 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
         SetHealth(uint32(GetMaxHealth()*restore_percent));
         SetPower(POWER_MANA, uint32(GetMaxPower(POWER_MANA)*restore_percent));
         SetPower(POWER_RAGE, 0);
+        SetPower(POWER_FOCUS, uint32(GetMaxPower(POWER_FOCUS)*restore_percent));
         SetPower(POWER_ENERGY, uint32(GetMaxPower(POWER_ENERGY)*restore_percent));
+        SetPower(POWER_RUNIC_POWER, 0);
     }
 
     // trigger update zone for alive state zone updates
@@ -10490,8 +10500,16 @@ void Player::InitDataForForm(bool reapplyMods)
 
     switch (form)
     {
+        case FORM_SERPENTSTANCE:
+            {
+                if (getPowerType() != POWER_MANA)
+                    setPowerType(POWER_MANA);
+                break;
+            }
         case FORM_GHOUL:
         case FORM_CAT:
+        case FORM_OXSTANCE:
+        case FORM_TIGERSTANCE:
             {
                 if (getPowerType() != POWER_ENERGY)
                     setPowerType(POWER_ENERGY);
@@ -12754,8 +12772,9 @@ void Player::ResurectUsingRequestData()
         SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
 
     SetPower(POWER_RAGE, 0);
-
+    SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
     SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
+    SetPower(POWER_RUNIC_POWER, 0);
 
     SpawnCorpseBones();
 }
