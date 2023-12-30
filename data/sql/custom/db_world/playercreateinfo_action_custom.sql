@@ -275,48 +275,48 @@ INSERT INTO `playercreateinfo_action` (`race`, `class`, `button`, `action`, `typ
 	(8, 11, 96, 6603, 0),
 	(9, 1, 72, 6603, 0),
 	(9, 1, 73, 78, 0),
-	(9, 1, 82, 0, 0),	-- placeholder - racial: Rocket Jump
-	(9, 1, 83, 0, 0),	-- placeholder - racial: Rocket Barrage
+	(9, 1, 82, 101016, 0),
+	(9, 1, 83, 101018, 0),
 	(9, 1, 84, 6603, 0),
 	(9, 1, 96, 6603, 0),
 	(9, 3, 0, 6603, 0),
 	(9, 3, 1, 2973, 0),
 	(9, 3, 2, 75, 0),
-	(9, 3, 10, 0, 0),	-- placeholder - racial: Rocket Barrage
-	(9, 3, 11, 0, 0),	-- placeholder - racial: Rocket Jump
+	(9, 3, 10, 101016, 0),
+	(9, 3, 11, 101018, 0),
 	(9, 4, 0, 6603, 0),
 	(9, 4, 1, 1752, 0),
 	(9, 4, 2, 2098, 0),
 	(9, 4, 3, 2764, 0),
-	(9, 4, 10, 0, 0),	-- placeholder - racial: Rocket Barrage
-	(9, 4, 11, 0, 0),	-- placeholder - racial: Rocket Jump
+	(9, 4, 10, 101016, 0),
+	(9, 4, 11, 101018, 0),
 	(9, 5, 0, 585, 0),
 	(9, 5, 1, 2050, 0),
-	(9, 5, 10, 0, 0),	-- placeholder - racial: Rocket Barrage
-	(9, 5, 11, 0, 0),	-- placeholder - racial: Rocket Jump
+	(9, 5, 10, 101016, 0),
+	(9, 5, 11, 101018, 0),
 	(9, 6, 0, 6603, 0),
 	(9, 6, 1, 49576, 0),
 	(9, 6, 2, 45477, 0),
 	(9, 6, 3, 45462, 0),
 	(9, 6, 4, 45902, 0),
 	(9, 6, 5, 47541, 0),
-	(9, 6, 10, 0, 0),	-- placeholder - racial: Rocket Jump
-	(9, 6, 11, 0, 0),	-- placeholder - racial: Rocket Barrage
+	(9, 6, 10, 101016, 0),
+	(9, 6, 11, 101018, 0),
 	(9, 7, 0, 6603, 0),
 	(9, 7, 1, 403, 0),
 	(9, 7, 2, 331, 0),
-	(9, 7, 10, 0, 0),	-- placeholder - racial: Rocket Barrage
-	(9, 7, 11, 0, 0),	-- placeholder - racial: Rocket Jump
+	(9, 7, 10, 101016, 0),
+	(9, 7, 11, 101018, 0),
 	(9, 8, 0, 133, 0),
 	(9, 8, 1, 168, 0),
-	(9, 8, 10, 0, 0),	-- placeholder - racial: Rocket Barrage
-	(9, 8, 11, 0, 0),	-- placeholder - racial: Rocket Jump
+	(9, 8, 10, 101016, 0),
+	(9, 8, 11, 101018, 0),
 	(9, 9, 0, 686, 0),
 	(9, 9, 1, 687, 0),
-	(9, 9, 10, 0, 0),	-- placeholder - racial: Rocket Barrage
-	(9, 9, 11, 0, 0),	-- placeholder - racial: Rocket Jump
-	(9, 10, 10, 0, 0),	-- placeholder - racial: Rocket Barrage
-	(9, 10, 11, 0, 0),	-- placeholder - racial: Rocket Jump
+	(9, 9, 10, 101016, 0),
+	(9, 9, 11, 101018, 0),
+	(9, 10, 10, 101016, 0),
+	(9, 10, 11, 101018, 0),
 	(10, 1, 72, 6603, 0),
 	(10, 1, 73, 78, 0),
 	(10, 1, 82, 101007, 0),
@@ -403,7 +403,6 @@ INSERT INTO `playercreateinfo_action` (`race`, `class`, `button`, `action`, `typ
 	(22, 4, 3, 2764, 0),
 	(22, 5, 0, 585, 0),
 	(22, 5, 1, 2050, 0),
-	(22, 5, 1, 2050, 0),
 	(22, 6, 0, 6603, 0),
 	(22, 6, 1, 49576, 0),
 	(22, 6, 2, 45477, 0),
@@ -432,7 +431,6 @@ INSERT INTO `playercreateinfo_action` (`race`, `class`, `button`, `action`, `typ
 	(24, 4, 3, 2764, 0),
 	(24, 5, 0, 585, 0),
 	(24, 5, 1, 2050, 0),
-	(24, 5, 1, 2050, 0),
 	(24, 5, 2, 59544, 0),
 	(24, 6, 0, 6603, 0),
 	(24, 6, 1, 49576, 0),
@@ -457,7 +455,6 @@ INSERT INTO `playercreateinfo_action` (`race`, `class`, `button`, `action`, `typ
 	(25, 4, 2, 2098, 0),
 	(25, 4, 3, 2764, 0),
 	(25, 5, 0, 585, 0),
-	(25, 5, 1, 2050, 0),
 	(25, 5, 1, 2050, 0),
 	(25, 5, 2, 59544, 0),
 	(25, 6, 0, 6603, 0),
