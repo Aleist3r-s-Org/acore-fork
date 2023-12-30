@@ -3949,6 +3949,60 @@ class spell_item_scroll_of_retribution : public SpellScript
     }
 };
 
+// 101037 - Shard of Stasis
+class spell_item_shard_of_stasis : public SpellScript
+{
+    PrepareSpellScript(spell_item_shard_of_stasis)
+
+    SpellCastResult CheckCast()
+    {
+        if (Unit* target = GetExplTargetUnit())
+            if (target->GetTypeId() == TYPEID_PLAYER && target->GetLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+                if (!(target->ToPlayer()->GetPlayerFlags() & PLAYER_FLAGS_NO_XP_GAIN))
+                    return SPELL_CAST_OK;
+
+        return SPELL_FAILED_BAD_TARGETS;
+    }
+
+    void HandleOnHit()
+    {
+        GetHitUnit()->ToPlayer()->SetPlayerFlag(PLAYER_FLAGS_NO_XP_GAIN);
+    }
+
+    void Register() override
+    {
+        OnCheckCast += SpellCheckCastFn(spell_item_shard_of_stasis::CheckCast);
+        OnHit += SpellHitFn(spell_item_shard_of_stasis::HandleOnHit);
+    }
+};
+
+// 101038 - Shard of Rising
+class spell_item_shard_of_rising : public SpellScript
+{
+    PrepareSpellScript(spell_item_shard_of_rising)
+
+        SpellCastResult CheckCast()
+    {
+        if (Unit* target = GetExplTargetUnit())
+            if (target->GetTypeId() == TYPEID_PLAYER && target->GetLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+                if (target->ToPlayer()->GetPlayerFlags() & PLAYER_FLAGS_NO_XP_GAIN)
+                    return SPELL_CAST_OK;
+
+        return SPELL_FAILED_BAD_TARGETS;
+    }
+
+    void HandleOnHit()
+    {
+        GetHitUnit()->ToPlayer()->RemovePlayerFlag(PLAYER_FLAGS_NO_XP_GAIN);
+    }
+
+    void Register() override
+    {
+        OnCheckCast += SpellCheckCastFn(spell_item_shard_of_rising::CheckCast);
+        OnHit += SpellHitFn(spell_item_shard_of_rising::HandleOnHit);
+    }
+};
+
 void AddSC_item_spell_scripts()
 {
     RegisterSpellScript(spell_item_massive_seaforium_charge);
@@ -4070,5 +4124,8 @@ void AddSC_item_spell_scripts()
     RegisterSpellScript(spell_item_worn_troll_dice);
     RegisterSpellScript(spell_item_venomhide_feed);
     RegisterSpellScript(spell_item_scroll_of_retribution);
+	// Custom
+	RegisterSpellScript(spell_item_shard_of_stasis);
+	RegisterSpellScript(spell_item_shard_of_rising);
 }
 
