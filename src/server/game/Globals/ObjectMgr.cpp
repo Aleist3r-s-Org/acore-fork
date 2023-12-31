@@ -3047,6 +3047,7 @@ void ObjectMgr::LoadItemTemplates()
                 case ITEM_MOD_RANGED_ATTACK_POWER:
                 case ITEM_MOD_SPELL_DAMAGE_DONE:
                 case ITEM_MOD_ARMOR_PENETRATION_RATING:
+                case ITEM_MOD_EXPERTISE_RATING:
                     LOG_ERROR("sql.sql", "Item (Entry: {}) has deprecated stat_type{} ({})", entry, j + 1, itemTemplate.ItemStat[j].ItemStatType);
                     break;
                 default:
