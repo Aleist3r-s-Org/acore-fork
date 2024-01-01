@@ -414,6 +414,8 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS] =
     &AuraEffect::HandleAuraModSpellPower,                         //351 SPELL_AURA_MOD_SPELL_POWER_FROM_RATING_PERCENT implemented in Unit::SpellBaseDamageBonusDone, Unit::SpellBaseHealingBonusDone
     &AuraEffect::HandleNoImmediateEffect,                         //352 SPELL_AURA_MOD_RECOVERY_RATE implemented in AuraEffect::PeriodicTick
     &AuraEffect::HandleNULL,                                      //353 SPELL_AURA_MOD_CATEGORY_COOLDOWN    // TODO
+    &AuraEffect::HandleNoImmediateEffect,                         //354 SPELL_AURA_MOD_RESTED_XP_MAX_AMOUNT implemented in Player::SetRestBonus ,Spell::EffectGiveRestedExperience
+    &AuraEffect::HandleNoImmediateEffect,                         //355 SPELL_AURA_MOD_RESTED_XP_RECOVERY_RATE implemented in Player::Update
 };
 
 AuraEffect::AuraEffect(Aura* base, uint8 effIndex, int32* baseAmount, Unit* caster):
