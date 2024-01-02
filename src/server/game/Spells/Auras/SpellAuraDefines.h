@@ -416,6 +416,7 @@ enum AuraType
     SPELL_AURA_MOD_CATEGORY_COOLDOWN                        = 353,  // NYI
     SPELL_AURA_MOD_RESTED_XP_MAX_AMOUNT                     = 354,
     SPELL_AURA_MOD_RESTED_XP_RECOVERY_RATE                  = 355,
+    SPELL_AURA_MOD_SPELL_POWER_OF_ATTACK_POWER              = 356,
     TOTAL_AURAS
 };
 

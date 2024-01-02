@@ -414,8 +414,9 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS] =
     &AuraEffect::HandleAuraModSpellPower,                         //351 SPELL_AURA_MOD_SPELL_POWER_FROM_RATING_PERCENT implemented in Unit::SpellBaseDamageBonusDone, Unit::SpellBaseHealingBonusDone
     &AuraEffect::HandleNoImmediateEffect,                         //352 SPELL_AURA_MOD_RECOVERY_RATE implemented in AuraEffect::PeriodicTick
     &AuraEffect::HandleNULL,                                      //353 SPELL_AURA_MOD_CATEGORY_COOLDOWN    // TODO
-    &AuraEffect::HandleNoImmediateEffect,                         //354 SPELL_AURA_MOD_RESTED_XP_MAX_AMOUNT implemented in Player::SetRestBonus ,Spell::EffectGiveRestedExperience
+    &AuraEffect::HandleNoImmediateEffect,                         //354 SPELL_AURA_MOD_RESTED_XP_MAX_AMOUNT implemented in Player::SetRestBonus, Spell::EffectGiveRestedExperience
     &AuraEffect::HandleNoImmediateEffect,                         //355 SPELL_AURA_MOD_RESTED_XP_RECOVERY_RATE implemented in Player::Update
+    &AuraEffect::HandleModSpellPowerPercentFromAttackPower,       //356 SPELL_AURA_MOD_SPELL_POWER_OF_ATTACK_POWER implemented in Unit::SpellBaseDamageBonusDone, Unit::SpellBaseHealingBonusDone
 };
 
 AuraEffect::AuraEffect(Aura* base, uint8 effIndex, int32* baseAmount, Unit* caster):
@@ -4644,6 +4645,19 @@ void AuraEffect::HandleModSpellHealingPercentFromAttackPower(AuraApplication con
         return;
 
     // Recalculate bonus
+    target->ToPlayer()->UpdateSpellDamageAndHealingBonus();
+}
+
+void AuraEffect::HandleModSpellPowerPercentFromAttackPower(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const
+{
+    if (!(mode & (AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK | AURA_EFFECT_HANDLE_STAT)))
+        return;
+
+    Unit* target = aurApp->GetTarget();
+
+    if (target->GetTypeId() != TYPEID_PLAYER)
+        return;
+
     target->ToPlayer()->UpdateSpellDamageAndHealingBonus();
 }
 
