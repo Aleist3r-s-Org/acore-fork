@@ -163,6 +163,7 @@ void AddSC_western_plaguelands();
 void AddSC_westfall();
 //void AddSC_wetlands();
 void AddSC_burning_steppes();
+void AddSC_instance_blackrock_caverns();
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
@@ -315,4 +316,5 @@ void AddEasternKingdomsScripts()
     AddSC_westfall();
     //AddSC_wetlands();
     AddSC_burning_steppes();
+    AddSC_instance_blackrock_caverns();
 }
