@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS `spell_jump_charge_params`;
+
 CREATE TABLE `spell_jump_charge_params` (
   `id` INT UNSIGNED NOT NULL,
   `speed` FLOAT NOT NULL DEFAULT '42',

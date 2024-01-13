@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS `playercreateinfo_cast_spell` (
 INSERT INTO `playercreateinfo_cast_spell` (`raceMask`, `classMask`, `spell`, `note`) VALUES
 	(0, 32, 48266, 'Death Knight - Blood Presence'),
 	(0, 1, 2457, 'Warrior - Battle Stance'),
-	(0, 512, 0, 'Monk - Tiger Stance');		-- placeholder
+	(0, 512, 101062, 'Monk - Tiger Stance');
