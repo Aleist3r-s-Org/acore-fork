@@ -2065,6 +2065,8 @@ Rate.Talent.Pet = 1
 #    Rate.Focus
 #    Rate.Energy
 #    Rate.Loyalty
+#    Rate.Fury.Income
+#    Rate.Fury.Loss
 #        Description: Multiplier to configure health, mana, incoming rage, loss of rage, focus
 #                     energy and loyalty increase or decrease.
 #        Default:     1 - (Rate.Health)
@@ -2076,6 +2078,8 @@ Rate.Talent.Pet = 1
 #                     1 - (Rate.Focus)
 #                     1 - (Rate.Energy)
 #                     1 - (Rate.Loyalty)
+#                     1 - (Rate.Fury.Income)
+#                     1 - (Rate.Fury.Loss)
 
 Rate.Health            = 1
 Rate.Mana              = 1
@@ -2086,6 +2090,8 @@ Rate.RunicPower.Loss   = 1
 Rate.Focus             = 1
 Rate.Energy            = 1
 Rate.Loyalty           = 1
+Rate.Fury.Income       = 1
+Rate.Fury.Loss         = 1
 
 #
 #    Rate.Rest.InGame

@@ -626,6 +626,14 @@ void World::LoadConfigSettings(bool reload)
         _rate_values[RATE_DURABILITY_LOSS_BLOCK] = 0.0f;
     }
 
+    _rate_values[RATE_POWER_FURY_INCOME] = sConfigMgr->GetOption<float>("Rate.Fury.Income", 1);
+    _rate_values[RATE_POWER_FURY_LOSS] = sConfigMgr->GetOption<float>("Rate.Fury.Loss", 1);
+    if (_rate_values[RATE_POWER_FURY_LOSS] < 0)
+    {
+        LOG_ERROR("server.loading", "Rate.Fury.Loss ({}) must be > 0. Using 1 instead.", _rate_values[RATE_POWER_FURY_LOSS]);
+        _rate_values[RATE_POWER_FURY_LOSS] = 1;
+    }
+
     ///- Read other configuration items from the config file
 
     _bool_configs[CONFIG_DURABILITY_LOSS_IN_PVP] = sConfigMgr->GetOption<bool>("DurabilityLoss.InPvP", false);

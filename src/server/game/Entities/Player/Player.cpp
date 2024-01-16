@@ -595,9 +595,12 @@ bool Player::Create(ObjectGuid::LowType guidlow, CharacterCreateInfo* createInfo
 
     if (getPowerType() == POWER_RUNIC_POWER)
     {
-        SetPower(POWER_RUNE, 8);
-        SetMaxPower(POWER_RUNE, 8);
-        SetPower(POWER_RUNIC_POWER, 0);
+        if (getClass() == CLASS_DEATH_KNIGHT)
+        {
+            SetPower(POWER_RUNE, 8);
+            SetMaxPower(POWER_RUNE, 8);
+            SetPower(POWER_RUNIC_POWER, 0);
+        }
         SetMaxPower(POWER_RUNIC_POWER, 1000);
     }
 
@@ -1885,8 +1888,16 @@ void Player::Regenerate(Powers power)
             {
                 if (!IsInCombat() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
                 {
-                    float RunicPowerDecreaseRate = sWorld->getRate(RATE_POWER_RUNICPOWER_LOSS);
-                    addvalue += -30 * RunicPowerDecreaseRate;         // 3 RunicPower by tick
+                    if (getClass() == CLASS_DEMON_HUNTER)
+                    {
+                        float FuryDecreaseRate = sWorld->getRate(RATE_POWER_FURY_LOSS);
+                        addvalue += -30 * FuryDecreaseRate;         // 3 Fury by tick
+                    }
+                    else
+                    {
+                        float RunicPowerDecreaseRate = sWorld->getRate(RATE_POWER_RUNICPOWER_LOSS);
+                        addvalue += -30 * RunicPowerDecreaseRate;         // 3 RunicPower by tick
+                    }
                 }
             }
             break;
