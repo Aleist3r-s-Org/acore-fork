@@ -51,6 +51,7 @@ class spell_monk_arcane_torrent : public SpellScript
             {
                 SPELL_BLOOD_ELF_ARCANE_TORRENT_MONK,
                 SPELL_BLOOD_ELF_ARCANE_TORRENT_ENERGY,
+                SPELL_BLOOD_ELF_ARCANE_TORRENT_MANA,
                 SPELL_MONK_SERPENT_STANCE
             });
     }
@@ -64,11 +65,16 @@ class spell_monk_arcane_torrent : public SpellScript
             PreventHitDefaultEffect(effIndex);
             caster->CastSpell(caster, SPELL_BLOOD_ELF_ARCANE_TORRENT_ENERGY, true);
         }
+        else
+        {
+            PreventHitDefaultEffect(effIndex);
+            caster->CastSpell(caster, SPELL_BLOOD_ELF_ARCANE_TORRENT_MANA, true);
+        }
     }
 
     void Register() override
     {
-        OnEffectHitTarget += SpellEffectFn(spell_monk_arcane_torrent::HandleOnHit, EFFECT_1, SPELL_EFFECT_TRIGGER_SPELL);
+        OnEffectHitTarget += SpellEffectFn(spell_monk_arcane_torrent::HandleOnHit, EFFECT_1, SPELL_EFFECT_DUMMY);
     }
 };
 
@@ -192,5 +198,8 @@ class spell_monk_tiger_stance_aura : public AuraScript
 
 void AddSC_monk_spell_scripts()
 {
-
+    RegisterSpellScript(spell_monk_arcane_torrent);
+    RegisterSpellScript(spell_monk_ox_stance_aura);
+    RegisterSpellScript(spell_monk_serpent_stance_aura);
+    RegisterSpellScript(spell_monk_tiger_stance_aura);
 }
