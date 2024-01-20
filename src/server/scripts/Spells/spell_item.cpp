@@ -3956,12 +3956,13 @@ class spell_item_shard_of_stasis : public SpellScript
 
     SpellCastResult CheckCast()
     {
-        if (Unit* target = GetExplTargetUnit())
-            if (target->GetTypeId() == TYPEID_PLAYER && target->GetLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
-                if (!(target->ToPlayer()->GetPlayerFlags() & PLAYER_FLAGS_NO_XP_GAIN))
-                    return SPELL_CAST_OK;
+        // Aleist3r: spell has SPELL_EFFECT_TRIGGER_SPELL with TARGET_UNIT_CASTER so we treat target as just GetCaster()
+        Unit* target = GetCaster();
 
-        return SPELL_FAILED_BAD_TARGETS;
+        if (!target || (target->GetTypeId() == TYPEID_PLAYER && (target->GetLevel() >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL) || target->ToPlayer()->GetPlayerFlags() & PLAYER_FLAGS_NO_XP_GAIN)))
+            return SPELL_FAILED_BAD_TARGETS;
+
+        return SPELL_CAST_OK;
     }
 
     void HandleOnHit()
@@ -3971,8 +3972,8 @@ class spell_item_shard_of_stasis : public SpellScript
 
     void Register() override
     {
-        OnCheckCast += SpellCheckCastFn(spell_item_shard_of_stasis::CheckCast);
         OnHit += SpellHitFn(spell_item_shard_of_stasis::HandleOnHit);
+        OnCheckCast += SpellCheckCastFn(spell_item_shard_of_stasis::CheckCast);
     }
 };
 
@@ -3981,14 +3982,15 @@ class spell_item_shard_of_rising : public SpellScript
 {
     PrepareSpellScript(spell_item_shard_of_rising)
 
-        SpellCastResult CheckCast()
+    SpellCastResult CheckCast()
     {
-        if (Unit* target = GetExplTargetUnit())
-            if (target->GetTypeId() == TYPEID_PLAYER && target->GetLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
-                if (target->ToPlayer()->GetPlayerFlags() & PLAYER_FLAGS_NO_XP_GAIN)
-                    return SPELL_CAST_OK;
+        // Aleist3r: spell has SPELL_EFFECT_TRIGGER_SPELL with TARGET_UNIT_CASTER so we treat target as just GetCaster()
+        Unit* target = GetCaster();
 
-        return SPELL_FAILED_BAD_TARGETS;
+        if (!target || (target->GetTypeId() == TYPEID_PLAYER && (target->GetLevel() >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL) || !(target->ToPlayer()->GetPlayerFlags() & PLAYER_FLAGS_NO_XP_GAIN))))
+            return SPELL_FAILED_BAD_TARGETS;
+
+        return SPELL_CAST_OK;
     }
 
     void HandleOnHit()
@@ -3998,8 +4000,8 @@ class spell_item_shard_of_rising : public SpellScript
 
     void Register() override
     {
-        OnCheckCast += SpellCheckCastFn(spell_item_shard_of_rising::CheckCast);
         OnHit += SpellHitFn(spell_item_shard_of_rising::HandleOnHit);
+        OnCheckCast += SpellCheckCastFn(spell_item_shard_of_rising::CheckCast);
     }
 };
 
@@ -4124,8 +4126,8 @@ void AddSC_item_spell_scripts()
     RegisterSpellScript(spell_item_worn_troll_dice);
     RegisterSpellScript(spell_item_venomhide_feed);
     RegisterSpellScript(spell_item_scroll_of_retribution);
-	// Custom
-	RegisterSpellScript(spell_item_shard_of_stasis);
-	RegisterSpellScript(spell_item_shard_of_rising);
+    // Custom
+    RegisterSpellScript(spell_item_shard_of_stasis);
+    RegisterSpellScript(spell_item_shard_of_rising);
 }
 
