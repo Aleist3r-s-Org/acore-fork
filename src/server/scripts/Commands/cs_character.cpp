@@ -1035,6 +1035,9 @@ public:
                     case SKILL_FIRST_AID:
                         handler->PSendSysMessage("%u - First Aid - %u", Counter, player->GetSkillValue(SkillID));
                         break;
+                    case SKILL_ARCHAEOLOGY:
+                        handler->PSendSysMessage("%u - Archaeology - %u", Counter, player->GetSkillValue(SkillID));
+                        break;
                     default:
                         break;
                 }

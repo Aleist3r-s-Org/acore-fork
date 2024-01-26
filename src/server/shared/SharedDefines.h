@@ -2634,7 +2634,8 @@ enum LockType
     LOCKTYPE_SLOW_CLOSE            = 18,
     LOCKTYPE_FISHING               = 19,
     LOCKTYPE_INSCRIPTION           = 20,
-    LOCKTYPE_OPEN_FROM_VEHICLE     = 21
+    LOCKTYPE_OPEN_FROM_VEHICLE     = 21,
+    LOCKTYPE_ARCHAEOLOGY           = 22
 };
 
 enum TrainerType                                            // this is important type for npcs!
@@ -2855,7 +2856,8 @@ enum QuestSort
     QUEST_SORT_PILGRIMS_BOUNTY     = 375,
     QUEST_SORT_LOVE_IS_IN_THE_AIR  = 376,
     QUEST_SORT_MONK                = 377,
-    QUEST_SORT_DEMON_HUNTER        = 378
+    QUEST_SORT_DEMON_HUNTER        = 378,
+    QUEST_SORT_ARCHAEOLOGY         = 379
 };
 
 inline uint8 ClassByQuestSort(int32 QuestSort)
@@ -3056,10 +3058,11 @@ enum SkillType
     SKILL_LANG_GILNEAN             = 798,
     SKILL_RACIAL_WORGEN            = 799,
     SKILL_LANG_PANDAREN            = 800,
-    SKILL_RACIAL_PANDAREN          = 801
+    SKILL_RACIAL_PANDAREN          = 801,
+    SKILL_ARCHAEOLOGY              = 802
 };
 
-#define MAX_SKILL_TYPE               802
+#define MAX_SKILL_TYPE               803
 
 inline SkillType SkillByLockType(LockType locktype)
 {
@@ -3075,6 +3078,8 @@ inline SkillType SkillByLockType(LockType locktype)
             return SKILL_FISHING;
         case LOCKTYPE_INSCRIPTION:
             return SKILL_INSCRIPTION;
+        case LOCKTYPE_ARCHAEOLOGY:
+            return SKILL_ARCHAEOLOGY;
         default:
             break;
     }
@@ -3107,6 +3112,8 @@ inline uint32 SkillByQuestSort(int32 QuestSort)
             return SKILL_JEWELCRAFTING;
         case QUEST_SORT_INSCRIPTION:
             return SKILL_INSCRIPTION;
+        case QUEST_SORT_ARCHAEOLOGY:
+            return SKILL_ARCHAEOLOGY;
     }
     return 0;
 }

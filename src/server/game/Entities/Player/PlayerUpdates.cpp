@@ -762,6 +762,7 @@ bool Player::UpdateGatherSkill(uint32 SkillId, uint32 SkillValue,
     case SKILL_LOCKPICKING:
     case SKILL_JEWELCRAFTING:
     case SKILL_INSCRIPTION:
+    case SKILL_ARCHAEOLOGY:
         return UpdateSkillPro(SkillId,
                               SkillGainChance(SkillValue, RedLevel + 100,
                                               RedLevel + 50, RedLevel + 25) *
