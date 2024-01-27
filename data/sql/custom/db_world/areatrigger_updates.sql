@@ -1,4 +1,4 @@
-DELETE FROM `areatrigger` WHERE `entry` IN (6877, 6878);
+DELETE FROM `areatrigger` WHERE `entry` IN (1468, 6877, 6878);
 
 INSERT INTO `areatrigger` (`entry`, `map`, `x`, `y`, `z`, `radius`, `length`, `width`, `height`, `orientation`) VALUES
 	(6877, 0, -7567.27, -1329.54, 245.515, 0, 13.12, 1.06, 15, 0.122173),
