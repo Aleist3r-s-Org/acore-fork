@@ -604,6 +604,8 @@ public:
 
     [[nodiscard]] SpellSchoolMask GetSpellSchoolMask() const { return m_spellSchoolMask; }
 
+    static void SpellErrorVoiceNotification(int32 powerType, Player* player);
+
  protected:
     bool HasGlobalCooldown() const;
     void TriggerGlobalCooldown();

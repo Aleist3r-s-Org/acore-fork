@@ -8896,6 +8896,284 @@ std::string Spell::GetDebugInfo() const
     return sstr.str();
 }
 
+// Aleist3r: this thing is ungodly, alas, seems like SPELL_FAILED_* enums are hardcoded in client
+// and error message depends on power type set in dbc
+void Spell::SpellErrorVoiceNotification(int32 powerType, Player* player)
+{
+    if (!player)
+        return;
+
+    if (!powerType)
+        return;
+
+    uint32 soundId = 0;
+    std::string currStr = "";
+
+    if (powerType == POWER_ENERGY)
+        currStr.append("energy");
+    else
+        currStr.append("unknown");
+
+    switch (player->getRace())
+    {
+        case RACE_HUMAN:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 9548;
+                        break;
+                    }
+                    soundId = 2627;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_ORC:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 2971;
+                        break;
+                    }
+                    soundId = 2954;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_DWARF:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 2899;
+                        break;
+                    }
+                    soundId = 2573;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_NIGHTELF:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 2666;
+                        break;
+                    }
+                    soundId = 2649;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_UNDEAD_PLAYER:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 2570;
+                        break;
+                    }
+                    soundId = 2638;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_TAUREN:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 2923;
+                        break;
+                    }
+                    soundId = 2567;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_GNOME:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 9548;
+                        break;
+                    }
+                    soundId = 2887;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_TROLL:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 2982;
+                        break;
+                    }
+                    soundId = 2577;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_GOBLIN:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 0;
+                        break;
+                    }
+                    soundId = 0;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_BLOODELF:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 9622;
+                        break;
+                    }
+                    soundId = 9621;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_DRAENEI:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 9548;
+                        break;
+                    }
+                    soundId = 9547;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_WORGEN:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 0;
+                        break;
+                    }
+                    soundId = 0;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case RACE_PANDAREN_ALLIANCE:
+        case RACE_PANDAREN_HORDE:
+        {
+            switch (powerType)
+            {
+                case POWER_ENERGY:
+                {
+                    if (player->getGender() == GENDER_FEMALE)
+                    {
+                        soundId = 0;
+                        break;
+                    }
+                    soundId = 0;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+
+    if (soundId != 0)
+        player->PlayDirectSound(soundId, player);
+
+    player->GetSession()->SendNotification("Not enough %s", currStr);
+}
+
 namespace Acore
 {
 

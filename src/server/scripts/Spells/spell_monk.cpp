@@ -30,7 +30,8 @@ enum MonkSpells
     SPELL_MONK_SERPENT_STANCE               = 101060,
     SPELL_MONK_SERPENT_STANCE_PASSIVE       = 101061,
     SPELL_MONK_TIGER_STANCE                 = 101062,
-    SPELL_MONK_TIGER_STANCE_PASSIVE         = 101063
+    SPELL_MONK_TIGER_STANCE_PASSIVE         = 101063,
+    SPELL_MONK_VIVIFY_ENERGY_COST           = 101094
 };
 
 enum MiscSpells
@@ -196,10 +197,53 @@ class spell_monk_tiger_stance_aura : public AuraScript
     }
 };
 
+// -101093 - Vivify
+class spell_monk_vivify : public SpellScript
+{
+    PrepareSpellScript(spell_monk_vivify);
+
+    bool Validate(SpellInfo const* /*spellEntry*/) override
+    {
+        return ValidateSpellInfo(
+            {
+                SPELL_MONK_OX_STANCE,
+                SPELL_MONK_TIGER_STANCE,
+                SPELL_MONK_VIVIFY_ENERGY_COST
+            });
+    }
+
+    SpellCastResult CheckRequirement()
+    {
+        Unit* caster = GetCaster();
+
+        if (caster->HasAura(SPELL_MONK_OX_STANCE) || caster->HasAura(SPELL_MONK_TIGER_STANCE))
+            if (caster->GetPower(POWER_ENERGY) < 30)
+            {
+                Spell::SpellErrorVoiceNotification(int32(POWER_ENERGY), caster->ToPlayer());
+                return SPELL_FAILED_DONT_REPORT;
+            }
+
+        return SPELL_CAST_OK;
+    }
+
+    void ConsumeEnergy()
+    {
+        if (GetCaster()->HasAura(SPELL_MONK_OX_STANCE) || GetCaster()->HasAura(SPELL_MONK_TIGER_STANCE))
+            GetCaster()->CastSpell(GetCaster(), SPELL_MONK_VIVIFY_ENERGY_COST, true);
+    }
+
+    void Register() override
+    {
+        OnCheckCast += SpellCheckCastFn(spell_monk_vivify::CheckRequirement);
+        OnCast += SpellCastFn(spell_monk_vivify::ConsumeEnergy);
+    }
+};
+
 void AddSC_monk_spell_scripts()
 {
     RegisterSpellScript(spell_monk_arcane_torrent);
     RegisterSpellScript(spell_monk_ox_stance_aura);
     RegisterSpellScript(spell_monk_serpent_stance_aura);
     RegisterSpellScript(spell_monk_tiger_stance_aura);
+    RegisterSpellScript(spell_monk_vivify);
 }

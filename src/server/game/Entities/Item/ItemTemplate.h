@@ -250,7 +250,8 @@ enum BAG_FAMILY_MASK
     BAG_FAMILY_MASK_CURRENCY_TOKENS           = 0x00002000,
     BAG_FAMILY_MASK_QUEST_ITEMS               = 0x00004000,
     BAG_FAMILY_MASK_FISHING_SUPP              = 0x00008000,
-    BAG_FAMILY_MASK_COOKING_SUPP              = 0x00010000
+    BAG_FAMILY_MASK_COOKING_SUPP              = 0x00010000,
+    BAG_FAMILY_MASK_ARCHAEOLOGICAL_SUPP       = 0x00020000
 };
 
 enum SocketColor
@@ -348,10 +349,11 @@ enum ItemSubclassContainer
     ITEM_SUBCLASS_LEATHERWORKING_CONTAINER      = 7,
     ITEM_SUBCLASS_INSCRIPTION_CONTAINER         = 8,
     ITEM_SUBCLASS_TACKLE_CONTAINER              = 9,
-    ITEM_SUBCLASS_COOKING_CONTAINER             = 10
+    ITEM_SUBCLASS_COOKING_CONTAINER             = 10,
+    ITEM_SUBCLASS_ARCHAEOLOGY_CONTAINER         = 11
 };
 
-#define MAX_ITEM_SUBCLASS_CONTAINER               11
+#define MAX_ITEM_SUBCLASS_CONTAINER               12
 
 enum ItemSubclassWeapon
 {
@@ -451,10 +453,11 @@ enum ItemSubclassTradeGoods
     ITEM_SUBCLASS_ENCHANTING                    = 12,
     ITEM_SUBCLASS_MATERIAL                      = 13,
     ITEM_SUBCLASS_ARMOR_ENCHANTMENT             = 14,
-    ITEM_SUBCLASS_WEAPON_ENCHANTMENT            = 15
+    ITEM_SUBCLASS_WEAPON_ENCHANTMENT            = 15,
+    ITEM_SUBCLASS_ARCHAEOLOGY_KEYSTONE          = 16
 };
 
-#define MAX_ITEM_SUBCLASS_TRADE_GOODS             16
+#define MAX_ITEM_SUBCLASS_TRADE_GOODS             17
 
 enum ItemSubclassGeneric
 {
@@ -476,10 +479,11 @@ enum ItemSubclassRecipe
     ITEM_SUBCLASS_ENCHANTING_FORMULA            = 8,
     ITEM_SUBCLASS_FISHING_MANUAL                = 9,
     ITEM_SUBCLASS_JEWELCRAFTING_RECIPE          = 10,
-    ITEM_SUBCLASS_INSCRIPTION_TECHNIQUE         = 11
+    ITEM_SUBCLASS_INSCRIPTION_TECHNIQUE         = 11,
+    ITEM_SUBCLASS_ARCAEOLOGY_PATTERN            = 12
 };
 
-#define MAX_ITEM_SUBCLASS_RECIPE                  12
+#define MAX_ITEM_SUBCLASS_RECIPE                  13
 
 enum ItemSubclassMoney
 {
