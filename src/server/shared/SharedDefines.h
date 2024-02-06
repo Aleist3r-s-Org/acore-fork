@@ -3059,10 +3059,11 @@ enum SkillType
     SKILL_RACIAL_WORGEN            = 799,
     SKILL_LANG_PANDAREN            = 800,
     SKILL_RACIAL_PANDAREN          = 801,
-    SKILL_ARCHAEOLOGY              = 802
+    SKILL_ARCHAEOLOGY              = 802,
+    SKILL_LIGHTNING                = 803
 };
 
-#define MAX_SKILL_TYPE               803
+#define MAX_SKILL_TYPE               804
 
 inline SkillType SkillByLockType(LockType locktype)
 {

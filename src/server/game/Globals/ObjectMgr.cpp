@@ -10287,7 +10287,7 @@ void ObjectMgr::LoadJumpChargeParams()
 
     if (!result)
     {
-        LOG_ERROR("sql.sql", ">> Loaded 0 jump charge params. DB table `spell_jump_charge_params` is empty.");
+        LOG_WARN("sql.sql", ">> Loaded 0 jump charge params. DB table `spell_jump_charge_params` is empty.");
         LOG_INFO("server.loading", " ");
         return;
     }
