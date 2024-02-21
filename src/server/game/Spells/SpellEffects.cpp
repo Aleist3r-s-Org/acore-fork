@@ -2196,7 +2196,8 @@ void Spell::EffectOpenLock(SpellEffIndex effIndex)
                     {
                         int32 xpLevel = goInfo->chest.xpMinLevel;
 
-                        Quest const* quest;
+                        //Aleist3r: works without initialization but Duskhaven PTR was consistently crashing here so using any quest id
+                        Quest const* quest = sObjectMgr->GetQuestTemplate(24746); // this quest actually exust in sql table, it's named "reuse"
                         player->GiveXP(quest->XPValue(player->getLevel(), xpLevel, xpDifficulty), nullptr);
                     }
                 }
