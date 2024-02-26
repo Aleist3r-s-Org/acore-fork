@@ -326,7 +326,7 @@ public:
     void HandlePreventResurrection(AuraApplication const* aurApp, uint8 mode, bool apply) const;
     void HandleForceBreathBar(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const;
     void HandleSetFFAPvP(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const;
-    void HandleTriggerSpellOnAuraStacks(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const;
+    void HandleTriggerSpellOnAuraStacks(AuraApplication const* aurApp, uint8 mode, bool apply) const;
     void HandleTriggerSpellOnExpire(AuraApplication const* aurApp, uint8 mode, bool apply) const;
 
     // aura effect periodic tick handlers

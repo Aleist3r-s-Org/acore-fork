@@ -393,7 +393,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS] =
     &AuraEffect::HandleNoImmediateEffect,                         //330 SPELL_AURA_INTERRUPT_IMMUNITY implemented in Spell::EffectInterruptCast
     &AuraEffect::HandleNoImmediateEffect,                         //331 SPELL_AURA_KNOCKBACK_IMMUNITY implemented in Spell::EffectKnockBack
     &AuraEffect::HandleNoImmediateEffect,                         //332 SPELL_AURA_TOGGLE_AURA_COMBAT_STATE
-    &AuraEffect::HandleTriggerSpellOnAuraStacks,                  //333 SPELL_AURA_TRIGGER_SPELL_ON_AURA_STACKS     // TODO
+    &AuraEffect::HandleTriggerSpellOnAuraStacks,                  //333 SPELL_AURA_TRIGGER_SPELL_ON_AURA_STACKS
     &AuraEffect::HandleTriggerSpellOnExpire,                      //334 SPELL_AURA_TRIGGER_SPELL_ON_EXPIRE
     &AuraEffect::HandleNoImmediateEffect,                         //335 SPELL_AURA_TRIGGER_SPELL_ON_HEALTH_PCT implemented in Unit::ToggleOnHealthPctAuras
     &AuraEffect::HandleNoImmediateEffect,                         //336 SPELL_AURA_TRIGGER_SPELL_ON_POWER_PCT implemented in Unit::ToggleOnPowerPctAuras
@@ -642,7 +642,8 @@ void AuraEffect::CalculatePeriodic(Unit* caster, bool create, bool load)
                 m_amplitude = 1 * IN_MILLISECONDS;
             [[fallthrough]]; /// @todo: Not sure whether the fallthrough was a mistake (forgetting a break) or intended. This should be double-checked.
         case SPELL_AURA_MOD_RECOVERY_RATE:
-            m_amplitude = 0.1f * IN_MILLISECONDS;
+            if (!m_amplitude)
+                m_amplitude = 0.1f * IN_MILLISECONDS;
             [[fallthrough]];
         case SPELL_AURA_PERIODIC_DAMAGE:
         case SPELL_AURA_PERIODIC_HEAL:
@@ -7632,9 +7633,34 @@ void AuraEffect::HandleSetFFAPvP(AuraApplication const* aurApp, uint8 mode, bool
     target->UpdateFFAPvPState();
 }
 
-void AuraEffect::HandleTriggerSpellOnAuraStacks(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const
+void AuraEffect::HandleTriggerSpellOnAuraStacks(AuraApplication const* aurApp, uint8 mode, bool apply) const
 {
-    
+    if (!(mode & (AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK | AURA_EFFECT_HANDLE_REAPPLY)))
+        return;
+
+    Unit* target = aurApp->GetTarget();
+    Unit* caster = GetCaster();
+    uint32 triggerSpellId = GetTriggerSpell();
+
+    if (!caster || !target || !(target->GetTypeId() == TYPEID_UNIT || target->GetTypeId() == TYPEID_PLAYER) || !(caster->IsAlive() || target->IsAlive()) || !triggerSpellId)
+        return;
+
+    if (apply)
+    {
+        Aura* aura = target->GetAura(GetId());
+
+        // Aleist3r: in theory it should be impossible to get stack amount higher than Misc A but just in case...
+        if (aura->GetStackAmount() >= GetMiscValue())
+        {
+            caster->CastSpell(target, triggerSpellId, true);
+
+            // Aleist3r: cannot think of any case that would require aura to not be removed after but keeping it implemented anyways
+            if (!GetMiscValueB())
+                target->RemoveAura(aura);
+        }
+    }
+    else
+        return;
 }
 
 void AuraEffect::HandleTriggerSpellOnExpire(AuraApplication const* aurApp, uint8 mode, bool apply) const
@@ -7644,7 +7670,10 @@ void AuraEffect::HandleTriggerSpellOnExpire(AuraApplication const* aurApp, uint8
 
     Unit* caster = GetCaster();
     Unit* target = aurApp->GetTarget();
-    uint32 triggerSpellId = GetMiscValue();
+    uint32 triggerSpellId = GetTriggerSpell();
+
+    if (!caster || !target || !(target->GetTypeId() == TYPEID_UNIT || target->GetTypeId() == TYPEID_PLAYER) || !(caster->IsAlive() || target->IsAlive()) || !triggerSpellId)
+        return;
 
     if (!apply && triggerSpellId)
         caster->CastSpell(target, triggerSpellId, true);
