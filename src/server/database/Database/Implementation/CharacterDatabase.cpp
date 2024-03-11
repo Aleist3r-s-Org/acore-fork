@@ -578,6 +578,10 @@ void CharacterDatabaseConnection::DoPrepareStatements()
     // Deserter tracker
     PrepareStatement(CHAR_INS_DESERTER_TRACK, "INSERT INTO battleground_deserters (guid, type, datetime) VALUES (?, ?, NOW())", CONNECTION_ASYNC);
 
+    // Anticheat Lua Cheaters
+    PrepareStatement(CHAR_INS_ANTICHEAT_LUA_CHEATERS, "INSERT IGNORE INTO `lua_cheaters` (guid, account, macro) VALUES (?, ?, ?)", CONNECTION_ASYNC);
+    PrepareStatement(CHAR_SEL_ANTICHEAT_LUA_CHEATERS, "SELECT guid, account FROM lua_cheaters WHERE account = ?", CONNECTION_SYNCH);
+
     // QuestTracker
     PrepareStatement(CHAR_INS_QUEST_TRACK, "INSERT INTO quest_tracker (id, character_guid, quest_accept_time, core_hash, core_revision) VALUES (?, ?, NOW(), ?, ?)", CONNECTION_ASYNC);
     PrepareStatement(CHAR_UPD_QUEST_TRACK_GM_COMPLETE, "UPDATE quest_tracker SET completed_by_gm = 1 WHERE id = ? AND character_guid = ? ORDER BY quest_accept_time DESC LIMIT 1", CONNECTION_ASYNC);
