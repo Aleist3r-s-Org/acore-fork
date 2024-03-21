@@ -382,6 +382,11 @@ uint32 constexpr QuestDifficultyColors[MAX_QUEST_DIFFICULTY] =
     0xffff2020
 };
 
+const uint32 MiscColors[1] =
+{
+    0xffff80ff         //FUCHSIA PINK apparently
+};
+
 // ***********************************
 // Spell Attributes definitions
 // ***********************************
@@ -958,8 +963,8 @@ enum SpellEffects
     SPELL_EFFECT_GIVE_HONOR                         = 167,
     SPELL_EFFECT_RECEIVE_ITEM                       = 168,
     SPELL_EFFECT_DESTROY_ITEM                       = 169,
-    SPELL_EFFECT_LEARN_TRANSMOG_ITEM                = 170,  // TODO: finish
-    SPELL_EFFECT_LEARN_TRANSMOG_SET                 = 171,  // TODO: finish
+    SPELL_EFFECT_LEARN_TRANSMOG_ITEM                = 170,
+    SPELL_EFFECT_LEARN_TRANSMOG_SET                 = 171,
     SPELL_EFFECT_LEARN_TRANSMOG_ILLUSION            = 172,  // TODO: finish
     SPELL_EFFECT_JUMP_CHARGE                        = 173,
     SPELL_EFFECT_MODIFY_CURRENT_SPELL_COOLDOWN      = 174,
@@ -3264,7 +3269,8 @@ enum ChatLinkColors
     CHAT_LINK_COLOR_SPELL       = 0xff71d5ff,   // bright blue
     CHAT_LINK_COLOR_ENCHANT     = 0xffffd000,   // orange
     CHAT_LINK_COLOR_ACHIEVEMENT = 0xffffff00,
-    CHAT_LINK_COLOR_GLYPH       = 0xff66bbff
+    CHAT_LINK_COLOR_GLYPH       = 0xff66bbff,
+    CHAT_LINK_COLOR_TRANSMOG    = 0xffff80ff
 };
 
 // Values from ItemPetFood (power of (value-1) used for compare with CreatureFamilyEntry.petDietMask

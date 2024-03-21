@@ -23,6 +23,7 @@
 #include "ItemTemplate.h"
 #include "LootMgr.h"
 #include "Object.h"
+#include "Transmogrification.h"
 
 class SpellInfo;
 class Bag;
@@ -226,14 +227,14 @@ public:
     void SetOwnerGUID(ObjectGuid guid) { SetGuidValue(ITEM_FIELD_OWNER, guid); }
     [[nodiscard]] Player* GetOwner() const;
 
-    void SetBinding(bool val) { ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_SOULBOUND, val); }
+    void SetBinding(bool val);
     [[nodiscard]] bool IsSoulBound() const { return HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_SOULBOUND); }
     [[nodiscard]] bool IsBoundAccountWide() const { return (GetTemplate()->Flags & ITEM_FLAG_IS_BOUND_TO_ACCOUNT) != 0; }
     bool IsBindedNotWith(Player const* player) const;
     [[nodiscard]] bool IsBoundByEnchant() const;
     [[nodiscard]] bool IsBoundByTempEnchant() const;
     virtual void SaveToDB(CharacterDatabaseTransaction trans);
-    virtual bool LoadFromDB(ObjectGuid::LowType guid, ObjectGuid owner_guid, Field* fields, uint32 entry);
+    virtual bool LoadFromDB(ObjectGuid::LowType guid, ObjectGuid owner_guid, Field* fields, uint32 entry, bool tmog = false);
     static void DeleteFromDB(CharacterDatabaseTransaction trans, ObjectGuid::LowType itemGuid);
     virtual void DeleteFromDB(CharacterDatabaseTransaction trans);
     static void DeleteFromInventoryDB(CharacterDatabaseTransaction trans, ObjectGuid::LowType itemGuid);
@@ -348,6 +349,11 @@ public:
     void ClearSoulboundTradeable(Player* currentOwner);
     bool CheckSoulboundTradeExpire();
 
+    void SetTransmog(uint32 entry) { transmog = GetEntry() == entry ? 0 : entry; }
+    void SetEnchant(uint32 entry) { enchant = GetEnchantmentId(PERM_ENCHANTMENT_SLOT) == entry ? 0 : entry; }
+    uint32 GetTransmog() const { return transmog; }
+    uint32 GetEnchant() const { return enchant; }
+
     void BuildUpdate(UpdateDataMapType& data_map, UpdatePlayerSet&) override;
     void AddToObjectUpdate() override;
     void RemoveFromObjectUpdate() override;
@@ -367,5 +373,8 @@ private:
     uint32 m_paidMoney;
     uint32 m_paidExtendedCost;
     AllowedLooterSet allowedGUIDs;
+
+    uint32 transmog = 0;
+    uint32 enchant = 0;
 };
 #endif

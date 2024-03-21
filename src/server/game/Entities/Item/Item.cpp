@@ -387,6 +387,8 @@ void Item::SaveToDB(CharacterDatabaseTransaction trans)
                 stmt->SetData(++index, GetUInt32Value(ITEM_FIELD_DURABILITY));
                 stmt->SetData(++index, GetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME));
                 stmt->SetData(++index, m_text);
+                stmt->SetData(++index, GetTransmog());
+                stmt->SetData(++index, GetEnchant());
                 stmt->SetData(++index, guid);
 
                 trans->Append(stmt);
@@ -429,7 +431,7 @@ void Item::SaveToDB(CharacterDatabaseTransaction trans)
         CharacterDatabase.CommitTransaction(trans);
 }
 
-bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid owner_guid, Field* fields, uint32 entry)
+bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid owner_guid, Field* fields, uint32 entry, bool tmog)
 {
     //                                                    0                1      2         3        4      5             6                 7           8           9    10
     //result = CharacterDatabase.Query("SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, playedTime, text FROM item_instance WHERE guid = '{}'", guid);
@@ -524,6 +526,11 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid owner_guid, Field* fi
         CharacterDatabase.Execute(stmt);
     }
 
+    if (tmog) {
+        transmog = fields[16].Get<int32>();
+        enchant = fields[17].Get<int32>();
+    }
+
     return true;
 }
 
@@ -562,6 +569,13 @@ ItemTemplate const* Item::GetTemplate() const
 Player* Item::GetOwner()const
 {
     return ObjectAccessor::FindPlayer(GetOwnerGUID());
+}
+
+void Item::SetBinding(bool val)
+{
+    ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_SOULBOUND, val);
+    if (val)
+        Transmogrification::instance().AddToCollection(GetOwner(), this);
 }
 
 // Legacy / Shortcut

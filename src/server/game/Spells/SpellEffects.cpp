@@ -63,6 +63,7 @@
 #include "Vehicle.h"
 #include "World.h"
 #include "WorldPacket.h"
+#include "Transmogrification.h"
 
  /// @todo: this import is not necessary for compilation and marked as unused by the IDE
 //  however, for some reasons removing it would cause a damn linking issue
@@ -2902,6 +2903,8 @@ void Spell::EffectEnchantItemPerm(SpellEffIndex effIndex)
 
         item_owner->RemoveTradeableItem(itemTarget);
         itemTarget->ClearSoulboundTradeable(item_owner);
+
+        Transmogrification::instance().AddToCollection(item_owner, itemTarget);
     }
 }
 
@@ -6532,7 +6535,8 @@ void Spell::EffectLearnTransmogItem(SpellEffIndex effIndex)
 
     ItemEntry const* itemEntry = sItemStore.LookupEntry(itemId);
 
-    //
+    if (itemEntry)
+        Transmogrification::instance().AddToCollection(player, sObjectMgr->GetItemTemplate(itemId));
 }
 
 void Spell::EffectLearnTransmogSet(SpellEffIndex effIndex)
@@ -6555,8 +6559,8 @@ void Spell::EffectLearnTransmogSet(SpellEffIndex effIndex)
     ItemSetEntry const* setEntry = sItemSetStore.LookupEntry(setId);
 
     for (uint32 i = 0; i < MAX_ITEM_SET_ITEMS; ++i)
-        if (setEntry->itemId[i]);
-    //        Transmogrification::instance().AddToCollection(player, sObjectMgr->GetItemTemplate(setEntry->itemId[i]));
+        if (setEntry->itemId[i])
+            Transmogrification::instance().AddToCollection(player, sObjectMgr->GetItemTemplate(setEntry->itemId[i]));
 }
 
 void Spell::EffectLearnTransmogIllusion(SpellEffIndex effIndex)

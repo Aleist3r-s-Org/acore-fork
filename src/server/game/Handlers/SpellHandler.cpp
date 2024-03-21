@@ -723,7 +723,12 @@ void WorldSession::HandleMirrorImageDataRequest(WorldPacket& recvData)
                 data << uint32(0);
             else if (Item const* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, *itr))
             {
-                uint32 displayInfoId = item->GetTemplate()->DisplayInfoID;
+                uint32 displayInfoId = 0;
+
+                if (auto const* itemTemplate = sObjectMgr->GetItemTemplate(item->GetTransmog()))
+                    displayInfoId = itemTemplate->DisplayInfoID;
+                else
+                    item->GetTemplate()->DisplayInfoID;
 
                 sScriptMgr->OnGlobalMirrorImageDisplayItem(item, displayInfoId);
 

@@ -44,6 +44,7 @@
 #    PET
 #    ITEM DELETE
 #    ITEM
+#    TRANSMOGRIFICATION
 #    QUEST
 #    CREATURE
 #    VENDOR
@@ -57,6 +58,7 @@
 #    BATTLEGROUND
 #    ARENA
 #    MAIL
+#    ANTICHEAT
 #    TRANSPORT
 #    CHAT CHANNEL
 #    FACTION INTERACTION
@@ -754,6 +756,14 @@ Logger.spells.scripts=2,Console Errors
 #Logger.vehicles=4,Console Server
 #Logger.warden=4,Console Server
 #Logger.weather=4,Console Server
+#Logger.custom.transmog = 3, Console Server
+
+# Anticheat Logging\Appenders
+# Currently spams into its own file
+# If you want world console spam just use Logger.anticheat=3,Console Server Anticheat
+
+Appender.Anticheat=2,3,15,anticheat.log,a
+Logger.anticheat=3,Server Anticheat
 
 #
 #    Log.Async.Enable
@@ -2685,6 +2695,195 @@ Item.SetItemTradeable = 1
 ###################################################################################################
 
 ###################################################################################################
+# TRANSMOGRIFICATION
+#
+#    Transmogrification.EnableTransmogInfo
+#        Description: Enables / Disables the info button for transmogrification
+#        Default:    1
+
+Transmogrification.EnableTransmogInfo = 1
+
+#
+#    Transmogrification.TransmogNpcText
+#        Description: The npc_text entry of the info menu for transmogrification
+#        Default:    65000
+
+Transmogrification.TransmogNpcText = 65000
+
+#
+#    Transmogrification.Allowed
+#        Description: A list of item entries that are allowed for transmogrification (skips quality and CanUseItem check)
+#                     Example: "25 35674 5623"
+#        Default:    ""
+
+Transmogrification.Allowed = ""
+
+#
+#    Transmogrification.NotAllowed
+#        Description: A list of item entries that are NOT allowed for transmogrification
+#                     Example: "25 35674 5623"
+#        Default:    ""
+
+Transmogrification.NotAllowed = ""
+
+#
+#    Transmogrification.ScaledCostModifier
+#        Description: A multiplier for the default gold cost (change to 0 for no default cost)
+#        Default:    1.0
+
+Transmogrification.ScaledCostModifier = 1.0
+
+#
+#    Transmogrification.CopperCost
+#        Description: Cost added on top of other costs (can be negative)
+#        Default:    0
+#
+#    For custom gold cost set ScaledCostModifier to 0.0 and CopperCost to what ever cost you want
+
+Transmogrification.CopperCost = 0
+
+#
+#    Transmogrification.AllowPoor
+#    Transmogrification.AllowCommon
+#    Transmogrification.AllowUncommon
+#    Transmogrification.AllowRare
+#    Transmogrification.AllowEpic
+#    Transmogrification.AllowLegendary
+#    Transmogrification.AllowArtifact
+#    Transmogrification.AllowHeirloom
+#        Description: Allow given item quality to be used as source and target items
+#        Default:     0 - (Transmogrification.AllowPoor)
+#        Default:     0 - (Transmogrification.AllowCommon)
+#        Default:     1 - (Transmogrification.AllowUncommon)
+#        Default:     1 - (Transmogrification.AllowRare)
+#        Default:     1 - (Transmogrification.AllowEpic)
+#        Default:     0 - (Transmogrification.AllowLegendary)
+#        Default:     0 - (Transmogrification.AllowArtifact)
+#        Default:     1 - (Transmogrification.AllowHeirloom)
+
+Transmogrification.AllowPoor = 0
+Transmogrification.AllowCommon = 0
+Transmogrification.AllowUncommon = 1
+Transmogrification.AllowRare = 1
+Transmogrification.AllowEpic = 1
+Transmogrification.AllowLegendary = 0
+Transmogrification.AllowArtifact = 0
+Transmogrification.AllowHeirloom = 1
+
+#
+#    Transmogrification.AllowMixedArmorTypes
+#        Description: Allow cloth items to be transmogrified with plate for example
+#        Default:    0
+
+Transmogrification.AllowMixedArmorTypes = 0
+
+#
+#    Transmogrification.AllowMixedWeaponTypes
+#        Description: Allow axe to be transmogrified with dagger for example
+#        Default:    0
+
+Transmogrification.AllowMixedWeaponTypes = 0
+
+#
+#    Transmogrification.AllowMixedInventoryTypes
+#        Description: Allow one hand to be transmogrified with main hand for example
+#        Default:    0
+
+Transmogrification.AllowMixedInventoryTypes = 0
+
+#
+#    Transmogrification.AllowFishingPoles
+#        Description: Allow fishing poles to be transmogrified
+#        Default:    0
+
+Transmogrification.AllowFishingPoles = 0
+
+#
+#    Transmogrification.IgnoreReqRace
+#    Transmogrification.IgnoreReqClass
+#    Transmogrification.IgnoreReqSkill
+#    Transmogrification.IgnoreReqSpell
+#    Transmogrification.IgnoreReqLevel
+#    Transmogrification.IgnoreReqEvent
+#    Transmogrification.IgnoreReqStats
+#    Transmogrification.IgnorePlayerMissingProfiency
+#    Transmogrification.IgnoreReqFaction
+#        Description: Ignore default requirement for source items
+#        Default:     0 - (Transmogrification.IgnoreReqRace)
+#        Default:     0 - (Transmogrification.IgnoreReqClass)
+#        Default:     0 - (Transmogrification.IgnoreReqSkill)
+#        Default:     0 - (Transmogrification.IgnoreReqSpell)
+#        Default:     0 - (Transmogrification.IgnoreReqLevel)
+#        Default:     0 - (Transmogrification.IgnoreReqEvent)
+#        Default:     0 - (Transmogrification.IgnoreReqStats)
+#        Default:     0 - (Transmogrification.IgnorePlayerMissingProfiency)
+#        Default:     0 - (Transmogrification.IgnoreReqFaction)
+
+Transmogrification.IgnoreReqRace = 0
+Transmogrification.IgnoreReqClass = 0
+Transmogrification.IgnoreReqSkill = 0
+Transmogrification.IgnoreReqSpell = 0
+Transmogrification.IgnoreReqLevel = 0
+Transmogrification.IgnoreReqEvent = 0
+Transmogrification.IgnoreReqStats = 0
+Transmogrification.IgnorePlayerMissingProfiency = 0
+Transmogrification.IgnoreReqFaction = 0
+
+#
+#    Transmogrification.IgnoreReqBound
+#        Description: Normally items must be bound for player to get the visual, this setting changes that
+#        Default:    0 - (Require items to be bound)
+#                    1 - (Require items to be bound, but allow items that can never be bound to work)
+#                    2 - (No binding requirements, even items not yet bound will work)
+
+Transmogrification.IgnoreReqBound = 0
+
+#
+#    Transmogrification.EnableSets
+#        Description: Enables / Disables the set feature. If you want permanent disable, check Transmogrification.h
+#        Default:    1
+
+Transmogrification.EnableSets = 1
+
+#
+#    Transmogrification.MaxSets
+#        Description: Maximum amount of sets a player can save (hardcap at 25)
+#        Default:    10
+
+Transmogrification.MaxSets = 10
+
+#
+#    Transmogrification.EnableSetInfo
+#        Description: Enables / Disables the info button for set fature
+#        Default:    1
+
+Transmogrification.EnableSetInfo = 1
+
+#
+#    Transmogrification.SetNpcText
+#        Description: The npc_text entry of the info menu for the set feature
+#        Default:    65001
+
+Transmogrification.SetNpcText = 65001
+
+#
+#    Transmogrification.SetCostModifier
+#        Description: A multiplier for the default gold cost (all costs summed together) (change to 0 for no default cost)
+#        Default:    3.0
+
+Transmogrification.SetCostModifier = 3.0
+
+#
+#    Transmogrification.SetCopperCost
+#        Description: Cost added on top of other costs (can be negative)
+#        Default:    0
+
+Transmogrification.SetCopperCost = 0
+
+#
+###################################################################################################
+
+###################################################################################################
 # QUEST
 #
 #    Quests.EnableQuestTracker
@@ -3842,6 +4041,8 @@ LevelReq.Mail = 1
 
 #
 ###################################################################################################
+
+###################################################################################################
 #   ANTICHEAT
 #
 #     Anticheat.Enable
@@ -4102,13 +4303,6 @@ Anticheat.CM.ALERTCHAT= 0
 #
 
 Anticheat.BG.StartAreaTeleport = 0
-
-# Anticheat Logging\Appenders
-# Currently spams into its own file
-# If you want world console spam just use Logger.anticheat=3,Console Server Anticheat
-
-Appender.Anticheat=2,3,15,anticheat.log,a
-Logger.anticheat=3,Server Anticheat
 
 #
 ###################################################################################################

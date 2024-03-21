@@ -42,6 +42,7 @@
 #include "TradeData.h"
 #include "Unit.h"
 #include "WorldSession.h"
+#include "TransmogrificationDefines.h"
 #include <string>
 #include <vector>
 
@@ -196,6 +197,13 @@ struct SpellModifier
     uint32 spellId{0};
     Aura* const ownerAura;
 };
+
+struct PresetData
+{
+    std::string name;
+    SetTransmogs data;
+};
+typedef std::map<uint8 /*presetid*/, PresetData> PresetMapType;
 
 typedef std::unordered_map<uint32, PlayerTalent*> PlayerTalentMap;
 typedef std::unordered_map<uint32, PlayerSpell*> PlayerSpellMap;
@@ -902,6 +910,8 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOAD_CORPSE_LOCATION         = 35,
     PLAYER_LOGIN_QUERY_LOAD_CHARACTER_SETTINGS      = 36,
     PLAYER_LOGIN_QUERY_LOAD_PET_SLOTS               = 37,
+    PLAYER_LOGIN_QUERY_LOAD_TRANSMOG                = 38,
+    PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_SETS           = 39,
     MAX_PLAYER_LOGIN_QUERY
 };
 
@@ -2611,6 +2621,13 @@ public:
     void UpdatePlayerSetting(std::string source, uint8 index, uint32 value);
 
     void SendSystemMessage(std::string_view msg, bool escapeCharacters = false);
+
+    // hater: xmog
+    BasicEvent* pendingTransmogCheck = nullptr;
+    typedef std::array<std::unordered_set<uint32>, EQUIPMENT_SLOT_END> AppearanceContainer;
+    AppearanceContainer transmogrification_appearances;
+    std::unordered_map<uint32 /*slot*/, std::unordered_map<uint32 /*visual*/, uint32 /*item*/>> _tmogVisualToItem;
+    PresetMapType presetMap;
 
     std::string GetDebugInfo() const override;
 
