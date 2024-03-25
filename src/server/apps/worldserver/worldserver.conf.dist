@@ -180,7 +180,7 @@ Database.Reconnect.Attempts = 20
 #        Example:     "@prefix@\home\youruser\azerothcore\data"
 #        Default:     "."
 
-DataDir = "."
+DataDir = "./data"
 
 #
 #    LogsDir
@@ -190,7 +190,7 @@ DataDir = "."
 #        Example:     "/home/youruser/azerothcore/logs"
 #        Default:     "" - (Log files will be stored in the current path)
 
-LogsDir = ""
+LogsDir = "./logs"
 
 #
 #    TempDir
@@ -200,7 +200,7 @@ LogsDir = ""
 #        Example:     "/home/youruser/azerothcore/temp"
 #        Default:     "" - (Temp files will be stored in the current path)
 
-TempDir = ""
+TempDir = "./temp"
 
 #
 #    CMakeCommand
@@ -268,7 +268,7 @@ Console.Enable = 1
 #        Default:     1 - (Enabled)
 #                     0 - (Disabled)
 
-BeepAtStart = 1
+BeepAtStart = 0
 
 #
 #    FlashAtStart
@@ -276,7 +276,7 @@ BeepAtStart = 1
 #        Default:     1 - (Enabled)
 #                     0 - (Disabled)
 
-FlashAtStart = 1
+FlashAtStart = 0
 
 #
 ###################################################################################################
@@ -873,7 +873,7 @@ World.RealmAvailability = 1
 #                     16 - (FFA_PVP, Free for all PvP mode like arena PvP in all zones except rest
 #                          activated places and sanctuaries)
 
-GameType = 0
+GameType = 1
 
 #
 #    RealmZone
@@ -1030,7 +1030,7 @@ UpdateUptimeInterval = 1
 #                     10+ - (Enabled, Recommended 30+)
 # Note: If enabled and the setting is too low, it can cause unexpected crash.
 
-MaxCoreStuckTime = 0
+MaxCoreStuckTime = 30
 
 #
 #    SaveRespawnTimeImmediately
@@ -1265,9 +1265,9 @@ Visibility.GroupMode = 1
 #                     120 - (Visibility.Distance.Instances)
 #                     180 - (Visibility.Distance.BGArenas)
 
-Visibility.Distance.Continents = 90
-Visibility.Distance.Instances = 120
-Visibility.Distance.BGArenas = 180
+Visibility.Distance.Continents = 100
+Visibility.Distance.Instances = 170
+Visibility.Distance.BGArenas = 250
 
 #
 #    Visibility.Notify.Period.OnContinents
@@ -1567,7 +1567,7 @@ GM.InWhoList.Level = 3
 #        Description: GM character starting level.
 #        Default:     1
 
-GM.StartLevel = 1
+GM.StartLevel = 80
 
 #
 #    GM.AllowInvite
@@ -1616,7 +1616,7 @@ GM.TicketSystem.ChanceOfGMSurvey = 50
 #                     2  - (Enabled, GMs/Admins)
 #                     3  - (Enabled, Admins)
 
-DisableWaterBreath = 4
+DisableWaterBreath = 2
 
 #
 #    AllFlightPaths
@@ -1711,7 +1711,7 @@ CastUnstuck = 1
 #        Description: Time (in milliseconds) for player save interval.
 #        Default:     900000 - (15 min)
 
-PlayerSaveInterval = 900000
+PlayerSaveInterval = 300000
 
 #
 #    PlayerSave.Stats.MinLevel
@@ -1727,7 +1727,7 @@ PlayerSave.Stats.MinLevel = 0
 #        Default:     1 - (Enabled, Only save on logout)
 #                     0 - (Disabled, Save on every player save)
 
-PlayerSave.Stats.SaveOnlyOnLogout = 1
+PlayerSave.Stats.SaveOnlyOnLogout = 0
 
 #
 #    CleanCharacterDB
@@ -1875,18 +1875,22 @@ CharacterCreating.Disabled = 0
 #
 #    CharacterCreating.Disabled.RaceMask
 #        Description: Mask of races which cannot be created by players.
-#        Example:     1536 - (1024 + 512, Blood Elf and Draenei races are disabled)
-#        Default:     0    - (Enabled, All races are allowed)
-#                     1    - (Disabled, Human)
-#                     2    - (Disabled, Orc)
-#                     4    - (Disabled, Dwarf)
-#                     8    - (Disabled, Night Elf)
-#                     16   - (Disabled, Undead)
-#                     32   - (Disabled, Tauren)
-#                     64   - (Disabled, Gnome)
-#                     128  - (Disabled, Troll)
-#                     512  - (Disabled, Blood Elf)
-#                     1024 - (Disabled, Draenei)
+#        Example:     1536     - (1024 + 512, Blood Elf and Draenei races are disabled)
+#        Default:     0        - (Enabled, All races are allowed)
+#                     1        - (Disabled, Human)
+#                     2        - (Disabled, Orc)
+#                     4        - (Disabled, Dwarf)
+#                     8        - (Disabled, Night Elf)
+#                     16       - (Disabled, Undead)
+#                     32       - (Disabled, Tauren)
+#                     64       - (Disabled, Gnome)
+#                     128      - (Disabled, Troll)
+#                     256      - (Disabled, Goblin)
+#                     512      - (Disabled, Blood Elf)
+#                     1024     - (Disabled, Draenei)
+#                     2097152  - (Disabled, Worgen)
+#                     8388608  - (Disabled, Pandaren [Alliance])
+#                     16777216 - (Disabled, Pandaren [Horde])
 
 CharacterCreating.Disabled.RaceMask = 0
 
@@ -1904,7 +1908,9 @@ CharacterCreating.Disabled.RaceMask = 0
 #                     64   - (Disabled, Shaman)
 #                     128  - (Disabled, Mage)
 #                     256  - (Disabled, Warlock)
+#                     512  - (Disabled, Monk)
 #                     1024 - (Disabled, Druid)
+#                     2048 - (Disabled, Demon Hunter)
 
 CharacterCreating.Disabled.ClassMask = 0
 
@@ -1930,7 +1936,7 @@ CharactersPerRealm = 10
 #        Range:       1-10
 #        Default:     1
 
-HeroicCharactersPerRealm = 1
+HeroicCharactersPerRealm = 10
 
 #
 #    CharacterCreating.MinLevelForHeroicCharacter
@@ -1940,7 +1946,7 @@ HeroicCharactersPerRealm = 1
 #                     0  - (Disabled)
 #                     1  - (Enabled, Requires at least another level 1 character)
 
-CharacterCreating.MinLevelForHeroicCharacter = 55
+CharacterCreating.MinLevelForHeroicCharacter = 0
 
 #
 #    StartPlayerLevel
@@ -1956,7 +1962,7 @@ StartPlayerLevel = 1
 #        Range:       1-MaxPlayerLevel
 #        Default:     55
 
-StartHeroicPlayerLevel = 55
+StartHeroicPlayerLevel = 1
 
 #
 #    SkipCinematics
@@ -1982,7 +1988,7 @@ StartPlayerMoney = 0
 #        Default:     2000
 #                     2000 - (20 Silver)
 
-StartHeroicPlayerMoney = 2000
+StartHeroicPlayerMoney = 0
 
 #
 #     PlayerStart.String
@@ -2018,7 +2024,7 @@ MaxPlayerLevel = 80
 #        Description: Level requirement for Dual Talent Specialization
 #        Default:     40
 
-MinDualSpecLevel = 40
+MinDualSpecLevel = 20
 
 #
 #    WaterBreath.Timer
@@ -2026,7 +2032,7 @@ MinDualSpecLevel = 40
 #        Default:     180000 (3 minutes)
 #
 
-WaterBreath.Timer = 180000
+WaterBreath.Timer = 300000
 
 #
 #    EnableLowLevelRegenBoost
@@ -2154,7 +2160,7 @@ LevelReq.Trade = 1
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-NoResetTalentsCost = 0
+NoResetTalentsCost = 1
 
 #
 #    ToggleXP.Cost
@@ -2175,7 +2181,7 @@ ToggleXP.Cost = 100000
 #        Range:       0-11
 #        Default:     2
 
-MaxPrimaryTradeSkill = 2
+MaxPrimaryTradeSkill = 3
 
 #
 #    SkillChance.Prospecting
@@ -2305,7 +2311,7 @@ Rate.Reputation.LowLevel.Quest = 1
 #        Description: Reputation bonus rate for recruit-a-friend.
 #        Default:     0.1
 
-Rate.Reputation.RecruitAFriendBonus = 0.1
+Rate.Reputation.RecruitAFriendBonus = 0.25
 
 #
 ###################################################################################################
@@ -2318,7 +2324,7 @@ Rate.Reputation.RecruitAFriendBonus = 0.1
 #                     death.
 #        Default:     74
 
-MaxGroupXPDistance = 74
+MaxGroupXPDistance = 150
 
 #
 #    Rate.XP.Kill
@@ -2370,7 +2376,7 @@ Rate.Pet.LevelXP = 0.05
 #        Description: Maximum honor points a character can have.
 #        Default:     75000
 
-MaxHonorPoints = 75000
+MaxHonorPoints = 150000
 
 #
 #    MaxHonorPointsMoneyPerPoint
@@ -2407,7 +2413,7 @@ Rate.Honor = 1
 #        Description: Maximum arena points a character can have.
 #        Default:     10000
 
-MaxArenaPoints = 10000
+MaxArenaPoints = 20000
 
 #
 #    StartArenaPoints
@@ -2580,7 +2586,7 @@ Pet.RankMod.Health = 1
 #        Default:     0 - (Completely remove item from the database)
 #                     1 - (Save Item to database)
 
-ItemDelete.Method = 0
+ItemDelete.Method = 1
 
 #
 #    ItemDelete.Vendor
@@ -2589,7 +2595,7 @@ ItemDelete.Method = 0
 #                     1 (enabled)
 #
 
-ItemDelete.Vendor = 0
+ItemDelete.Vendor = 1
 
 #
 #    ItemDelete.Quality
@@ -2616,7 +2622,7 @@ ItemDelete.Quality = 3
 #        Default:     80
 #
 
-ItemDelete.ItemLevel = 80
+ItemDelete.ItemLevel = 0
 
 #
 ###################################################################################################
@@ -2836,7 +2842,7 @@ Transmogrification.IgnoreReqFaction = 0
 #                    1 - (Require items to be bound, but allow items that can never be bound to work)
 #                    2 - (No binding requirements, even items not yet bound will work)
 
-Transmogrification.IgnoreReqBound = 0
+Transmogrification.IgnoreReqBound = 1
 
 #
 #    Transmogrification.EnableSets
@@ -2850,7 +2856,7 @@ Transmogrification.EnableSets = 1
 #        Description: Maximum amount of sets a player can save (hardcap at 25)
 #        Default:    10
 
-Transmogrification.MaxSets = 10
+Transmogrification.MaxSets = 25
 
 #
 #    Transmogrification.EnableSetInfo
@@ -2927,7 +2933,7 @@ Quests.HighLevelHideDiff = 7
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-Quests.IgnoreRaid = 0
+Quests.IgnoreRaid = 1
 
 #
 #    Quests.IgnoreAutoAccept
@@ -2935,7 +2941,7 @@ Quests.IgnoreRaid = 0
 #        Default:     0 - (Disabled, DB values determine if quest is marked auto accept or not.)
 #                     1 - (Enabled, clients will not be told to automatically accept any quest.)
 
-Quests.IgnoreAutoAccept = 0
+Quests.IgnoreAutoAccept = 1
 
 #
 #    Quests.IgnoreAutoComplete
@@ -3053,7 +3059,7 @@ Corpse.Decay.WORLDBOSS = 3600
 #    Rate.Corpse.Decay.Looted
 #        Description: Multiplier for Corpse.Decay.* to configure how long creature corpses stay
 #                     after they have been looted.
-#         Default:    0.5
+#         Default:    0.1
 
 Rate.Corpse.Decay.Looted = 0.5
 
@@ -3121,14 +3127,14 @@ Rate.Creature.Elite.WORLDBOSS.HP = 1
 #                     gameobjects.
 #        Default:     40
 
-ListenRange.Say = 40
+ListenRange.Say = 50
 
 #
 #    ListenRange.TextEmote
 #        Description: Distance in which players can read emotes from creatures or gameobjects.
 #        Default:     40
 
-ListenRange.TextEmote = 40
+ListenRange.TextEmote = 50
 
 #
 #    ListenRange.Yell
@@ -3136,7 +3142,7 @@ ListenRange.TextEmote = 40
 #                     gameobjects.
 #        Default:     300
 
-ListenRange.Yell = 300
+ListenRange.Yell = 400
 
 #
 #    Creature.MovingStopTimeForPlayer
@@ -3158,7 +3164,7 @@ WaypointMovementStopTimeForPlayer = 120
 #                     is unreachable to end up in evade mode.
 #        Default:     5
 
-NpcEvadeIfTargetIsUnreachable = 5
+NpcEvadeIfTargetIsUnreachable = 10
 
 #    NpcRegenHPIfTargetIsUnreachable
 #        Description: Regenerates HP for Creatures in Raids if they cannot reach the target.
@@ -3323,8 +3329,9 @@ Instance.ResetTimeHour = 4
 #                     both 3-day and 7-day raids were reset.
 #        Default:     1135814400 - (Thu, 29 Dec 2005 00:00:00 GMT - meaning that 7-day raid reset falls on Thursdays,
 #                                   while 3-day reset falls on "Thu 29 Dec 2005", "Sun 01 Jan 2006", "Wed 04 Jan 2006", and so on)
+#                     1135555200 - (Mon, 26 Dec 2005 00:00:00 GMT)
 
-Instance.ResetTimeRelativeTimestamp = 1135814400
+Instance.ResetTimeRelativeTimestamp = 1135555200
 
 #
 #    Rate.InstanceResetTime
@@ -3351,7 +3358,7 @@ Instance.UnloadDelay = 1800000
 #        Description: Controls the max amount of different instances player can enter within hour
 #        Default:     5
 
-AccountInstancesPerHour = 5
+AccountInstancesPerHour = 10
 
 #
 #   Instance.SharedNormalHeroicId
@@ -3432,7 +3439,7 @@ LFG.Location.All = 0
 #        Default:     2
 #                     0 - Disabled (kicks are never allowed)
 
-LFG.MaxKickCount = 2
+LFG.MaxKickCount = 3
 
 #
 #     LFG.KickPreventionTimer
@@ -3440,7 +3447,7 @@ LFG.MaxKickCount = 2
 #        Default:     900 secs (15 minutes)
 #                     0 - Disabled
 
-LFG.KickPreventionTimer = 900
+LFG.KickPreventionTimer = 300
 
 #
 #    DungeonAccessRequirements.LFGLevelDBCOverride
@@ -3462,7 +3469,7 @@ DungeonAccessRequirements.LFGLevelDBCOverride = 0
 #        Range:       1-24
 #        Default:     2
 
-MinCharterName = 2
+MinCharterName = 1
 
 #
 #    StrictCharterNames
@@ -3508,7 +3515,7 @@ Guild.ResetHour = 6
 #                     impacts.
 #        Default:     25 - (Minimum)
 
-Guild.BankEventLogRecordsCount = 25
+Guild.BankEventLogRecordsCount = 100
 
 #
 #    MinPetitionSigns
@@ -3516,7 +3523,7 @@ Guild.BankEventLogRecordsCount = 25
 #        Range:       0-9
 #        Default:     9
 
-MinPetitionSigns = 9
+MinPetitionSigns = 3
 
 #
 #    Guild.CharterCost
@@ -3733,7 +3740,7 @@ Battleground.PremadeGroupWaitForMatch = 1800000
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-Battleground.GiveXPForKills = 0
+Battleground.GiveXPForKills = 1
 
 #
 #    Battleground.Random.ResetHour
@@ -3885,7 +3892,7 @@ Arena.PreviousOpponentsDiscardTimer = 120000
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-Arena.AutoDistributePoints = 0
+Arena.AutoDistributePoints = 1
 
 #
 #    Arena.AutoDistributeInterval
@@ -3935,7 +3942,7 @@ Arena.QueueAnnouncer.Detail = 3
 #        Description: Current arena season id shown in clients.
 #        Default:     8
 
-Arena.ArenaSeason.ID = 8
+Arena.ArenaSeason.ID = 0
 
 #
 #    Arena.ArenaSeason.InProgress
@@ -3943,7 +3950,7 @@ Arena.ArenaSeason.ID = 8
 #        Default:     1 - (Active)
 #                     0 - (Finished)
 
-Arena.ArenaSeason.InProgress = 1
+Arena.ArenaSeason.InProgress = 0
 
 #
 #    Arena.ArenaStartRating
@@ -4030,7 +4037,7 @@ MaxAllowedMMRDrop = 500
 #        Description: Time (in seconds) mail delivery is delayed when sending items.
 #        Default:     3600 - (1 hour)
 
-MailDeliveryDelay = 3600
+MailDeliveryDelay = 60
 
 #
 #     LevelReq.Mail
@@ -4383,7 +4390,7 @@ ChatFakeMessagePreventing = 1
 #                     locales will likely be blocked by the server.
 #
 
-ChatStrictLinkChecking.Severity = 0
+ChatStrictLinkChecking.Severity = -1
 
 #
 #    ChatStrictLinkChecking.Kick
@@ -4542,7 +4549,7 @@ AllowTwoSide.Accounts = 1
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Calendar = 0
+AllowTwoSide.Interaction.Calendar = 1
 
 #
 #    AllowTwoSide.Interaction.Chat
@@ -4550,7 +4557,7 @@ AllowTwoSide.Interaction.Calendar = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Chat = 0
+AllowTwoSide.Interaction.Chat = 1
 
 #
 #    AllowTwoSide.Interaction.Emote
@@ -4558,7 +4565,7 @@ AllowTwoSide.Interaction.Chat = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Emote = 0
+AllowTwoSide.Interaction.Emote = 1
 
 #
 #    AllowTwoSide.Interaction.Channel
@@ -4566,7 +4573,7 @@ AllowTwoSide.Interaction.Emote = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Channel = 0
+AllowTwoSide.Interaction.Channel = 1
 
 #
 #    AllowTwoSide.Interaction.Group
@@ -4574,7 +4581,7 @@ AllowTwoSide.Interaction.Channel = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Group = 0
+AllowTwoSide.Interaction.Group = 1
 
 #
 #    AllowTwoSide.Interaction.Guild
@@ -4582,7 +4589,7 @@ AllowTwoSide.Interaction.Group = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Guild = 0
+AllowTwoSide.Interaction.Guild = 1
 
 #
 #    AllowTwoSide.Interaction.Arena
@@ -4590,7 +4597,7 @@ AllowTwoSide.Interaction.Guild = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Arena = 0
+AllowTwoSide.Interaction.Arena = 1
 
 #
 #    AllowTwoSide.Interaction.Auction
@@ -4598,7 +4605,7 @@ AllowTwoSide.Interaction.Arena = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Auction = 0
+AllowTwoSide.Interaction.Auction = 1
 
 #
 #    AllowTwoSide.Interaction.Mail
@@ -4606,7 +4613,7 @@ AllowTwoSide.Interaction.Auction = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Interaction.Mail = 0
+AllowTwoSide.Interaction.Mail = 1
 
 #
 #    AllowTwoSide.WhoList
@@ -4614,7 +4621,7 @@ AllowTwoSide.Interaction.Mail = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.WhoList = 0
+AllowTwoSide.WhoList = 1
 
 #
 #    AllowTwoSide.AddFriend
@@ -4622,7 +4629,7 @@ AllowTwoSide.WhoList = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.AddFriend = 0
+AllowTwoSide.AddFriend = 1
 
 #
 #    AllowTwoSide.Trade
@@ -4630,7 +4637,7 @@ AllowTwoSide.AddFriend = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AllowTwoSide.Trade = 0
+AllowTwoSide.Trade = 1
 
 #
 #    TalentsInspecting
@@ -4661,7 +4668,7 @@ ChangeFaction.MaxMoney = 0
 #                     experience multiplier.
 #        Default:     60
 
-RecruitAFriend.MaxLevel = 60
+RecruitAFriend.MaxLevel = 79
 
 #
 #    RecruitAFriend.MaxDifference
@@ -4669,7 +4676,7 @@ RecruitAFriend.MaxLevel = 60
 #                     the Recruit-A-Friend experience multiplier.
 #        Default:     4
 
-RecruitAFriend.MaxDifference = 4
+RecruitAFriend.MaxDifference = 9
 
 #
 #    MaxRecruitAFriendBonusDistance
@@ -4677,7 +4684,7 @@ RecruitAFriend.MaxDifference = 4
 #                     XP multiplier.
 #        Default:     100
 
-MaxRecruitAFriendBonusDistance = 100
+MaxRecruitAFriendBonusDistance = 200
 
 #
 ###################################################################################################
@@ -4783,8 +4790,8 @@ PlayerDump.DisallowOverwrite = 1
 #                    73827 - 25% buff Alliance
 #                    73828 - 30% buff Alliance
 
-ICC.Buff.Horde    = 73822
-ICC.Buff.Alliance = 73828
+ICC.Buff.Horde    = 0
+ICC.Buff.Alliance = 0
 
 #
 #     Minigob.Manabonk.Enable
